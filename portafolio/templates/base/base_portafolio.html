@@ -1,0 +1,623 @@
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="es" data-bs-theme="dark">
+    <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block titulo %}{% endblock %}</title>
+    <meta name="description" content="Portfolio, blog y proyectos de Kevin Agüero (Tecno Kev). Desarrollo, datos y automatización." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="/favicon.ico">
+    <style>
+        
+
+        /* Swiper wrapper más ancho y alto */
+        .swiper-wrapper {
+            padding-bottom: 40px; /* espacio alrededor de las slides */
+        }
+
+        .portfolio-item .tk-card{
+            min-height: 500px;
+            max-height: 500px;
+        }
+
+        /* Botón ver detalle */
+        .tk-card .p-4 a.btn {
+            align-self: flex-start; /* o flex-end si querés a la derecha */
+            margin-top: auto; /* empuja el botón al fondo */
+        }
+
+        :root{
+        /* Paleta editable del branding */
+        --tk-bg: #0b0f14;         /* Fondo base */
+        --tk-surface: #121821;    /* Superficie tarjetas/nav */
+        --tk-primary: #00e0ff;    /* Cian brillante */
+        --tk-accent: #7c3aed;     /* Violeta acento */
+        --tk-text: #e6f1ff;       /* Texto principal */
+        --tk-muted: #a5b4c7;      /* Texto secundario */
+        --tk-gradient: linear-gradient(135deg, rgba(0,224,255,.3), rgba(124,58,237,.3));
+        }
+
+        *{box-sizing:border-box}
+        html, body{height:100%}
+        body{
+        font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: var(--tk-bg);
+        color: var(--tk-text);
+        letter-spacing:.1px;
+        }
+
+        /* Navbar */
+        .navbar{
+        background: rgba(18,24,33,.75);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+        .navbar-brand strong{color:var(--tk-primary)}
+        .nav-link{position:relative}
+        .nav-link.active, .nav-link:hover{color:var(--tk-primary)!important}
+        .nav-link::after{
+        content:""; position:absolute; left:.5rem; right:.5rem; bottom:.3rem; height:2px;
+        background: var(--tk-primary); transform: scaleX(0); transform-origin:left; transition:.25s ease;
+        }
+        .nav-link:hover::after{transform: scaleX(1)}
+
+        /* Hero Parallax */
+        .hero{
+        position:relative; min-height:90vh; display:grid; place-items:center; text-align:center; overflow:hidden;
+        color: var(--tk-text);
+        }
+        .hero__bg{
+        position:absolute; inset:0; background:url('https://images.unsplash.com/photo-1518773553398-650c184e0bb3?q=80&w=1940&auto=format&fit=crop') center/cover no-repeat fixed;
+        transform: translateZ(0);
+        will-change: transform;
+        filter: saturate(1.1) contrast(1.05) brightness(.9);
+        }
+        .hero__overlay{ position:absolute; inset:0; background: radial-gradient(ellipse at 30% 20%, rgba(124,58,237,.35), transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(0,224,255,.35), transparent 50%), linear-gradient(to bottom, rgba(11,15,20,.6), rgba(11,15,20,.95)); }
+        .hero__content{ position:relative; z-index:2; padding: 0 1rem }
+        .badge-tech{background: rgba(0,224,255,.15); color: var(--tk-primary); border:1px solid rgba(0,224,255,.35)}
+        .hero h1{ font-weight:800; font-size: clamp(2.2rem, 5vw, 4.2rem); line-height:1.05; }
+        .hero p{ color: var(--tk-muted); max-width: 62ch; margin: 1rem auto 0 }
+
+        .glow{position:absolute; inset: -20% -10% -10% -10%; background: var(--tk-gradient); filter: blur(60px); opacity:.45; z-index:0}
+
+        /* Sections */
+        section{padding: 5rem 0}
+        .section-title{font-weight:800; letter-spacing:.3px}
+        .section-lead{color:var(--tk-muted)}
+
+        /* Cards */
+        .tk-card{background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)); border:1px solid rgba(255,255,255,.08); border-radius:1.25rem; overflow:hidden}
+        .tk-card:hover{border-color: rgba(0,224,255,.5); box-shadow:0 10px 30px rgba(0,224,255,.08)}
+
+        /* Portfolio grid */
+        .portfolio-filters .btn{border-color: rgba(255,255,255,.14)}
+        .portfolio-filters .btn.active{background: var(--tk-primary); color:#00131a; border-color:transparent}
+        .portfolio-item img{width:100%; height:220px; object-fit:cover}
+
+        /* Blog cards */
+        .blog-card img{height:170px; object-fit:cover}
+
+        /* About */
+        .about-avatar{width:110px; height:110px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.2)}
+
+        /* Contact */
+        .form-control, .form-select{background: rgba(255,255,255,.02); color: var(--tk-text); border:1px solid rgba(255,255,255,.12)}
+        .form-control:focus{border-color: var(--tk-primary); box-shadow:0 0 0 .25rem rgba(0,224,255,.15)}
+
+        /* Footer */
+        footer{border-top:1px solid rgba(255,255,255,.08); background: var(--tk-surface)}
+
+        /* Reveal on scroll */
+        .reveal{opacity:0; transform: translateY(18px); transition: .5s ease}
+        .reveal.visible{opacity:1; transform:none}
+
+        /* Responsive tweaks */
+        @media (max-width: 991.98px){
+        .hero{min-height:80vh}
+        .hero__bg{background-attachment: scroll}
+        }
+    </style>
+    
+    </head>
+    <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+        <a class="navbar-brand fw-bold" href="#home">Tecno <strong>Kev</strong></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="#home">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="#about">Acerca de mí</a></li>
+            <li class="nav-item"><a class="nav-link" href="#portfolio">Proyectos</a></li>
+            <li class="nav-item"><a class="nav-link" href="#blog">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Contacto</a></li>
+            <li class="nav-item ms-lg-3">
+                <button id="themeToggle" class="btn btn-outline-light btn-sm" type="button" aria-label="Cambiar tema">Tema</button>
+            </li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+
+    <!-- HERO / HOME -->
+    <header id="home" class="hero position-relative">
+        <div class="hero__bg" id="parallaxBg" aria-hidden="true"></div>
+        <div class="hero__overlay" aria-hidden="true"></div>
+        <div class="glow" aria-hidden="true"></div>
+
+        <div class="hero__content container">
+        <span class="badge rounded-pill badge-tech px-3 py-2">Automatización • IA • Web • Datos</span>
+        <h1 class="mt-3">Hola, soy <span style="color:var(--tk-primary)">Kevin Agüero</span> — <span style="color:var(--tk-accent)">Tecno Kev</span></h1>
+        <p class="lead">Desarrollo soluciones end-to-end: desde backend y pipelines de datos, hasta interfaces modernas. Aquí comparto mi portafolio, artículos y notas técnicas.</p>
+        <div class="d-flex gap-3 justify-content-center mt-4">
+            <a href="#portfolio" class="btn btn-primary btn-lg">Ver proyectos</a>
+            <a href="#contact" class="btn btn-outline-light btn-lg">Hablemos</a>
+        </div>
+        <div class="text-center mt-5">
+            <small class="text-secondary">Scroll</small>
+            <div class="text-center text-secondary">⌄</div>
+        </div>
+        </div>
+    </header>
+
+    <!-- ABOUT -->
+    <section id="about" class="position-relative">
+        <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-5">
+            <div class="tk-card p-4 tilt-card">
+                <img class="about-avatar mb-3" src="https://images.unsplash.com/photo-1531123414780-f742b5cf9b89?q=80&w=400&auto=format&fit=crop" alt="Avatar" />
+                <h2 class="section-title mb-3">Acerca de mí</h2>
+                <p class="section-lead">Ingeniero en Informática, experto en SQL, JavaScript/HTML y en construir chatbots con RAG y LangChain. Me apasiona optimizar procesos, integrar n8n, y llevar ideas a producción.</p>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                <span class="badge text-bg-dark border">Python</span>
+                <span class="badge text-bg-dark border">Django</span>
+                <span class="badge text-bg-dark border">PostgreSQL</span>
+                <span class="badge text-bg-dark border">LangChain</span>
+                <span class="badge text-bg-dark border">n8n</span>
+                <span class="badge text-bg-dark border">Streamlit</span>
+                <span class="badge text-bg-dark border">RAG</span>
+                </div>
+            </div>
+            </div>
+            <div class="col-lg-7">
+            <div class="row g-4">
+                <div class="col-sm-6">
+                <div class="tk-card h-100 p-4 reveal tilt-card">
+                    <h5 class="fw-bold">Qué hago</h5>
+                    <p class="mb-0">APIs, ETLs y dashboards; automatizaciones con n8n; bots conversacionales; sitios performantes con buenas prácticas.</p>
+                </div>
+                </div>
+                <div class="col-sm-6">
+                <div class="tk-card h-100 p-4 reveal tilt-card">
+                    <h5 class="fw-bold">Cómo trabajo</h5>
+                    <p class="mb-2">Enfoque en negocio, medición, feedback continuo y entrega incremental.</p>
+                    <ul class="mb-0 small text-secondary ps-3">
+                    <li>Arquitectura clara</li>
+                    <li>Pruebas y monitoreo</li>
+                    <li>Documentación concisa</li>
+                    </ul>
+                </div>
+                </div>
+                <div class="col-sm-6">
+                <div class="tk-card h-100 p-4 reveal tilt-card">
+                    <h5 class="fw-bold">Valor</h5>
+                    <p class="mb-0">Reduzco tiempos con automatización, mejoro la calidad de datos y habilito decisiones con analítica.</p>
+                </div>
+                </div>
+                <div class="col-sm-6">
+                <div class="tk-card h-100 p-4 reveal tilt-card">
+                    <h5 class="fw-bold">Disponibilidad</h5>
+                    <p class="mb-0">Proyectos y consultoría. ¿Tenés una idea? La iteramos y la lanzamos.</p>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO / PROYECTOS -->
+    <section id="portfolio">
+    <div class="container">
+        <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+        <div>
+            <h2 class="section-title">Proyectos</h2>
+            <p class="section-lead">Algunos trabajos recientes. Filtrá por categoría.</p>
+        </div>
+        <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
+            <button class="btn btn-outline-light active" data-filter="*">Todos</button>
+            <button class="btn btn-outline-light" data-filter="web">Web</button>
+            <button class="btn btn-outline-light" data-filter="data">Datos</button>
+            <button class="btn btn-outline-light" data-filter="ai">IA</button>
+            <button class="btn btn-outline-light" data-filter="automation">Automatización</button>
+        </div>
+        </div>
+
+        <!-- Slider -->
+        <div class="swiper portfolio-slider">
+        <div class="swiper-wrapper">
+
+            <!-- Item 1 -->
+            <div class="swiper-slide portfolio-item">
+            <div class="tk-card h-100 d-flex flex-column">
+                <img src="https://images.unsplash.com/photo-1483478550801-ceba5fe50e8e?q=80&w=1600&auto=format&fit=crop" alt="Proyecto RAG" />
+                <div class="p-4 d-flex flex-column flex-grow-1">
+                <h5 class="fw-bold mb-1">Chatbot RAG para pedidos</h5>
+                <p class="text-secondary small mb-3">LangChain • PDF pricing • Streamlit</p>
+                <!-- Contenedor para descripción con scroll -->
+                <div class="description flex-grow-1 mb-3" style="max-height:125px; overflow-y:auto;">
+                    Asistente que consulta menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como estas
+                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
+                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
+                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
+                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
+                </div>
+                <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj1">Ver detalle</a>
+                </div>
+            </div>
+            </div>
+
+
+            <!-- Item 2 -->
+            <div class="swiper-slide portfolio-item">
+            <div class="tk-card h-100 d-flex flex-column">
+                <img src="https://msmk.university/wp-content/uploads/2024/11/imagen-de-inteligencia-artificial.webp" alt="ETL n8n" />
+                <div class="p-4 d-flex flex-column flex-grow-1">
+                <h5 class="fw-bold mb-1">ETL precios farmacéuticos</h5>
+                <p class="text-secondary small mb-3">n8n • scraping • PostgreSQL</p>
+                <div class="description flex-grow-1 mb-3" style="max-height:125px; overflow-y:auto;">
+                    Flujo que integra precios actualizados a un sistema interno, con verificación y alertas. aaaaaaa
+                    asdasdas ma intea ssa
+                </div>
+                <a href="#" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#proj2">Ver detalle</a>
+                </div>
+            </div>
+            </div>
+
+            <!-- Item 1 -->
+            <div class="swiper-slide portfolio-item">
+            <div class="tk-card h-100 d-flex flex-column">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Toyota_Robot_at_Toyota_Kaikan.jpg" alt="Proyecto RAG" />
+                <div class="p-4 d-flex flex-column flex-grow-1">
+                <h5 class="fw-bold mb-1">Chatbot RAG para pedidos</h5>
+                <p class="text-secondary small mb-3">LangChain • PDF pricing • Streamlit</p>
+                <!-- Contenedor para descripción con scroll -->
+                <div class="description flex-grow-1 mb-3" style="max-height:125px; overflow-y:auto;">
+                    Asistente que consulta menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como estas
+                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
+                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
+                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
+                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
+                </div>
+                <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj1">Ver detalle</a>
+                </div>
+            </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="swiper-slide portfolio-item">
+            <div class="tk-card h-100 d-flex flex-column">
+                <img src="https://msmk.university/wp-content/uploads/2024/11/imagen-de-inteligencia-artificial.webp" alt="ETL n8n" />
+                <div class="p-4 d-flex flex-column flex-grow-1">
+                <h5 class="fw-bold mb-1">ETL precios farmacéuticos</h5>
+                <p class="text-secondary small mb-3">n8n • scraping • PostgreSQL</p>
+                <div class="description flex-grow-1 mb-3" style="max-height:125px; overflow-y:auto;">
+                    Flujo que integra precios actualizados a un sistema interno, con verificación y alertas. aaaaaaa
+                    asdasdas ma intea ssa
+                </div>
+                <a href="#" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#proj2">Ver detalle</a>
+                </div>
+            </div>
+            </div>
+
+
+
+        </div>
+        <!-- Controles -->
+        <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    </section>
+
+    <!-- SwiperJS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+    const swiper = new Swiper('.portfolio-slider', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: true,
+        autoplay: {
+        delay: 9000, // 9 segundos
+        disableOnInteraction: false,
+        },
+        pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+        },
+        navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+        768: { slidesPerView: 2 },
+        992: { slidesPerView: 3 }
+        }
+    });
+    </script>
+
+
+    <!-- BLOG -->
+    <section id="blog">
+        <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+            <h2 class="section-title">Blog</h2>
+            <p class="section-lead">Notas técnicas, tutoriales y experimentos.</p>
+            </div>
+            <a href="#" class="btn btn-outline-light">Ver todos</a>
+        </div>
+
+        <div class="row g-4">
+            <article class="col-md-6 col-lg-4">
+            <div class="tk-card blog-card h-100">
+                <img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1600&auto=format&fit=crop" alt="Post 1" />
+                <div class="p-4">
+                <h5 class="fw-bold">Optimizar vistas pesadas en PostgreSQL</h5>
+                <p class="small text-secondary">31 Ago 2025 • 8 min</p>
+                <p>Exploro estrategias para acelerar <code>vw_consumos</code>: índices, materialized views y particionado.</p>
+                <a class="stretched-link" href="#">Leer</a>
+                </div>
+            </div>
+            </article>
+            <article class="col-md-6 col-lg-4">
+            <div class="tk-card blog-card h-100">
+                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1600&auto=format&fit=crop" alt="Post 2" />
+                <div class="p-4">
+                <h5 class="fw-bold">RAG sin dolor con LangChain + PDFs</h5>
+                <p class="small text-secondary">04 Ago 2025 • 6 min</p>
+                <p>Cómo montar un pipeline de ingesta, chunking y búsqueda semántica para menús y precios.</p>
+                <a class="stretched-link" href="#">Leer</a>
+                </div>
+            </div>
+            </article>
+            <article class="col-md-6 col-lg-4">
+            <div class="tk-card blog-card h-100">
+                <img src="https://images.unsplash.com/photo-1551808525-51a94da548ce?q=80&w=1600&auto=format&fit=crop" alt="Post 3" />
+                <div class="p-4">
+                <h5 class="fw-bold">n8n + Django: Webhooks y OAuth</h5>
+                <p class="small text-secondary">29 Ago 2025 • 7 min</p>
+                <p>Configuración práctica de callbacks y despliegue seguro con túneles tipo ngrok.</p>
+                <a class="stretched-link" href="#">Leer</a>
+                </div>
+            </div>
+            </article>
+        </div>
+        </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contact">
+        <div class="container">
+        <div class="row g-4 align-items-start">
+            <div class="col-lg-6">
+            <h2 class="section-title">Contacto</h2>
+            <p class="section-lead">¿Proyecto, consultoría o colaboración? Escribime y coordinamos.</p>
+            <form id="contactForm" novalidate class="tk-card p-4">
+                <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-control" name="name" required>
+                    <div class="invalid-feedback">Ingresá tu nombre.</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" required>
+                    <div class="invalid-feedback">Ingresá un email válido.</div>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Asunto</label>
+                    <input type="text" class="form-control" name="subject" required>
+                    <div class="invalid-feedback">Contame brevemente el tema.</div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Mensaje</label>
+                    <textarea class="form-control" rows="5" name="message" required></textarea>
+                    <div class="invalid-feedback">Escribí un mensaje.</div>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                    <button class="btn btn-primary" type="submit">Enviar</button>
+                    <span id="formStatus" class="align-self-center small text-secondary"></span>
+                </div>
+                </div>
+            </form>
+            </div>
+            <div class="col-lg-6">
+            <div class="tk-card p-4 h-100">
+                <h5 class="fw-bold mb-3">Redes y enlaces</h5>
+                <ul class="list-unstyled mb-4">
+                <li class="mb-2">📧 <a href="mailto:contacto@tecnokev.dev">contacto@tecnokev.dev</a></li>
+                <li class="mb-2">🐙 <a href="#" target="_blank" rel="noreferrer">GitHub</a></li>
+                <li class="mb-2">💼 <a href="#" target="_blank" rel="noreferrer">LinkedIn</a></li>
+                <li class="mb-2">🧵 <a href="#" target="_blank" rel="noreferrer">X / Threads</a></li>
+                </ul>
+                <h5 class="fw-bold mb-3">Disponibilidad</h5>
+                <p class="mb-0">Catamarca (UTC-3). Respondo en 24-48h hábiles. Idiomas: ES / EN.</p>
+            </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-4">
+        <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+        <div class="small">© <span id="year"></span> Tecno Kev — Kevin Agüero</div>
+        <div class="small text-secondary">Hecho con Bootstrap 5</div>
+        </div>
+    </footer>
+
+    <!-- PROJECT MODALS -->
+    <div class="modal fade" id="proj1" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+            <h5 class="modal-title">Chatbot RAG para pedidos</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <p>Stack: LangChain, OpenAI/Groq, Streamlit, embeddings, PDF ingestion. Autenticación básica y guardado de sesiones.</p>
+            <ul>
+                <li>Ingesta de menús PDF → chunking → vector store.</li>
+                <li>Contexto controlado (retrievers + filtros).</li>
+                <li>Panel de administración para precios.</li>
+            </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="modal fade" id="proj2" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+            <h5 class="modal-title">ETL precios farmacéuticos</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <p>Stack: n8n, scraping responsable, PostgreSQL, alertas por cambios.</p>
+            <ul>
+                <li>Normalización de catálogos y SKUs.</li>
+                <li>Validación y logs de ejecución.</li>
+                <li>Dashboards con métricas de variación.</li>
+            </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="modal fade" id="proj3" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+            <h5 class="modal-title">Dashboard KPI municipal</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <p>Stack: Django, charting JS, auth con roles. Métricas de uso, tiempos y alertas por geocercas.</p>
+            <ul>
+                <li>Integración con datos operativos.</li>
+                <li>Reportes exportables.</li>
+                <li>Notificaciones por umbrales.</li>
+            </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ===== Utilidades =====
+        const $ = (sel, el=document) => el.querySelector(sel);
+        const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+
+        // Año footer
+        $('#year').textContent = new Date().getFullYear();
+
+        // Navbar active link on scroll
+        const sections = $$('#home, #about, #portfolio, #blog, #contact');
+        const navLinks = $$('.nav-link');
+        const obs = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+            if(e.isIntersecting){
+            navLinks.forEach(l=>l.classList.remove('active'));
+            const id = e.target.getAttribute('id');
+            const link = $(`.nav-link[href="#${id}"]`);
+            link && link.classList.add('active');
+            }
+        })
+        },{threshold:.6});
+        sections.forEach(s => obs.observe(s));
+
+        // Reveal on scroll
+        const revObs = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); revObs.unobserve(e.target);} });
+        }, {threshold:.2});
+        $$('.reveal').forEach(el=>revObs.observe(el));
+
+        // Parallax efecto suave (mejor que background-attachment en mobile)
+        const parallaxBg = document.getElementById('parallaxBg');
+        const onScroll = ()=>{
+        const y = window.scrollY || window.pageYOffset;
+        // Mover fondo más lento que el scroll
+        parallaxBg.style.transform = `translateY(${y * 0.35}px)`;
+        };
+        document.addEventListener('scroll', onScroll, {passive:true});
+
+        // Filtros de portafolio
+        const grid = $('#portfolioGrid');
+        $$('.portfolio-filters .btn').forEach(btn=>{
+        btn.addEventListener('click', () => {
+            $$('.portfolio-filters .btn').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            const f = btn.dataset.filter;
+            $$('.portfolio-item', grid).forEach(card =>{
+            const cats = (card.dataset.cat || '').split(' ');
+            const show = f === '*' || cats.includes(f);
+            card.style.display = show ? '' : 'none';
+            });
+        });
+        });
+
+        // Theme toggle (dark / light con Bootstrap 5.3)
+        const root = document.documentElement;
+        const toggleBtn = document.getElementById('themeToggle');
+        const savedTheme = localStorage.getItem('tk-theme');
+        if(savedTheme){ document.documentElement.setAttribute('data-bs-theme', savedTheme); }
+        toggleBtn.addEventListener('click', ()=>{
+        const current = root.getAttribute('data-bs-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-bs-theme', next);
+        localStorage.setItem('tk-theme', next);
+        });
+
+        // Contact form (demo)
+        const form = document.getElementById('contactForm');
+        const status = document.getElementById('formStatus');
+        form.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        // Validación simple
+        if(!form.checkValidity()){
+            e.stopPropagation();
+            form.classList.add('was-validated');
+            status.textContent = 'Revisá los campos.';
+            return;
+        }
+        status.textContent = 'Enviando…';
+        setTimeout(()=>{
+            status.textContent = '¡Gracias! Te responderé a la brevedad.';
+            form.reset();
+            form.classList.remove('was-validated');
+        }, 700);
+        });
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+    <script>
+            VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
+        max: 15,           // ángulo máximo de inclinación
+        speed: 400,        // velocidad de animación
+        glare: true,       // efecto de brillo
+        "max-glare": 0.3,  // intensidad del brillo
+        scale: 1.05        // agrandar un poquito al hacer hover
+        });
+
+    </script>
+    </body>
+    </html>
