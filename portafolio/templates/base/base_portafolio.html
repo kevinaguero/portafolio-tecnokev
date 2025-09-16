@@ -11,8 +11,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-        
+        .hero-silueta {
+            position: absolute;
+            bottom: -200px;
+            left: 0;              /* cambialo a left:0; si querés a la izquierda */
+            width: 350px;          /* ajustá el tamaño a gusto */
+            max-width: 40%;        /* responsivo */
+            pointer-events: none;  /* que no interfiera con clics */
+            user-select: none;     /* que no se seleccione por error */
+            z-index: -2;            /* arriba del fondo, pero detrás del contenido */
+            opacity: 0.9;          /* un poco traslúcido para no robar atención */
+        }
+
 
         /* Swiper wrapper más ancho y alto */
         .swiper-wrapper {
@@ -27,7 +39,6 @@
         /* Botón ver detalle */
         .tk-card .p-4 a.btn {
             align-self: flex-start; /* o flex-end si querés a la derecha */
-            margin-top: auto; /* empuja el botón al fondo */
         }
 
         :root{
@@ -125,7 +136,7 @@
     </head>
     <body>
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg sticky-top">
+    <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
         <a class="navbar-brand fw-bold" href="#home">Tecno <strong>Kev</strong></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -153,19 +164,19 @@
         <div class="glow" aria-hidden="true"></div>
 
         <div class="hero__content container">
-        <span class="badge rounded-pill badge-tech px-3 py-2">Automatización • IA • Web • Datos</span>
-        <h1 class="mt-3">Hola, soy <span style="color:var(--tk-primary)">Kevin Agüero</span> — <span style="color:var(--tk-accent)">Tecno Kev</span></h1>
-        <p class="lead">Desarrollo soluciones end-to-end: desde backend y pipelines de datos, hasta interfaces modernas. Aquí comparto mi portafolio, artículos y notas técnicas.</p>
-        <div class="d-flex gap-3 justify-content-center mt-4">
-            <a href="#portfolio" class="btn btn-primary btn-lg">Ver proyectos</a>
-            <a href="#contact" class="btn btn-outline-light btn-lg">Hablemos</a>
+            <span class="badge rounded-pill badge-tech px-3 py-2">Automatización • IA • Web • Datos</span>
+            <h1 class="mt-3">Hola, soy <span style="color:var(--tk-primary)">Kevin Agüero</span> — <span style="color:var(--tk-accent)">Tecno Kev</span></h1>
+            <p class="lead">Desarrollo soluciones end-to-end: desde backend y pipelines de datos, hasta interfaces modernas. Aquí comparto mi portafolio, artículos y notas técnicas.</p>
+            <div class="d-flex gap-3 justify-content-center mt-4">
+                <a href="#portfolio" class="btn btn-primary btn-lg">Ver proyectos</a>
+                <a href="#contact" class="btn btn-outline-light btn-lg">Hablemos</a>
+            </div>
+            <img src="{% static 'img/silueta.png' %}" alt="silueta kev" class="hero-silueta" />
         </div>
-        <div class="text-center mt-5">
-            <small class="text-secondary">Scroll</small>
-            <div class="text-center text-secondary">⌄</div>
-        </div>
-        </div>
+
+        
     </header>
+
 
     <!-- ABOUT -->
     <section id="about" class="position-relative">
@@ -173,17 +184,17 @@
         <div class="row g-4 align-items-center">
             <div class="col-lg-5">
             <div class="tk-card p-4 tilt-card">
-                <img class="about-avatar mb-3" src="https://images.unsplash.com/photo-1531123414780-f742b5cf9b89?q=80&w=400&auto=format&fit=crop" alt="Avatar" />
+                <img class="about-avatar mb-3" src="{%static 'img/avatar.jpg'%}" alt="Avatar" />
                 <h2 class="section-title mb-3">Acerca de mí</h2>
                 <p class="section-lead">Ingeniero en Informática, experto en SQL, JavaScript/HTML y en construir chatbots con RAG y LangChain. Me apasiona optimizar procesos, integrar n8n, y llevar ideas a producción.</p>
                 <div class="d-flex flex-wrap gap-2 mt-3">
-                <span class="badge text-bg-dark border">Python</span>
-                <span class="badge text-bg-dark border">Django</span>
-                <span class="badge text-bg-dark border">PostgreSQL</span>
-                <span class="badge text-bg-dark border">LangChain</span>
-                <span class="badge text-bg-dark border">n8n</span>
-                <span class="badge text-bg-dark border">Streamlit</span>
-                <span class="badge text-bg-dark border">RAG</span>
+                    <span class="badge text-bg-dark border"><i class="fa-brands fa-python me-1"></i> Python</span>
+                    <span class="badge text-bg-dark border"><img src="https://cdn.simpleicons.org/django/FFFFFF" alt="Django" width="16" height="16" class="me-1">Django</span>
+                    <span class="badge text-bg-dark border"><i class="fa-solid fa-database me-1"></i> PostgreSQL</span>
+                    <span class="badge text-bg-dark border"><i class="fa-solid fa-link me-1"></i> LangChain</span>
+                    <span class="badge text-bg-dark border"><i class="fa-solid fa-diagram-project me-1"></i> n8n</span>
+                    <span class="badge text-bg-dark border"><i class="fa-brands fa-react me-1"></i> Streamlit</span>
+                    <span class="badge text-bg-dark border"><i class="fa-solid fa-book-open me-1"></i> RAG</span>
                 </div>
             </div>
             </div>
@@ -226,181 +237,148 @@
 
     <!-- PORTFOLIO / PROYECTOS -->
     <section id="portfolio">
-    <div class="container">
-        <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
-        <div>
-            <h2 class="section-title">Proyectos</h2>
-            <p class="section-lead">Algunos trabajos recientes. Filtrá por categoría.</p>
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+            <div>
+                <h2 class="section-title">Proyectos</h2>
+                <p class="section-lead">Algunos trabajos recientes. Filtrá por categoría.</p>
+            </div>
+            <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
+                <button class="btn btn-outline-light active" data-filter="*">Todos</button>
+                <button class="btn btn-outline-light" data-filter="web">Web</button>
+                <button class="btn btn-outline-light" data-filter="data">Datos</button>
+                <button class="btn btn-outline-light" data-filter="ai">IA</button>
+                <button class="btn btn-outline-light" data-filter="automation">Automatización</button>
+            </div>
+            </div>
+
+            <!-- Slider -->
+            <div class="swiper portfolio-slider">
+                <div class="swiper-wrapper">
+
+                    <!-- Item 1 -->
+                    <div class="swiper-slide portfolio-item">
+                    <div class="tk-card h-100 d-flex flex-column">
+                        <img src="https://images.unsplash.com/photo-1483478550801-ceba5fe50e8e?q=80&w=1600&auto=format&fit=crop" alt="Proyecto RAG" />
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                        <h5 class="fw-bold mb-1">Chatbot RAG para pedidos</h5>
+                        <p class="text-secondary small mb-3">LangChain • PDF pricing • Streamlit</p>
+                        <!-- Contenedor para descripción con scroll -->
+                        <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
+                            Asistente que consulta menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como estas
+
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj1">Ver detalle</a>
+                        </div>
+                    </div>
+                    </div>
+
+
+                    <!-- Item 2 -->
+                    <div class="swiper-slide portfolio-item">
+                    <div class="tk-card h-100 d-flex flex-column">
+                        <img src="https://msmk.university/wp-content/uploads/2024/11/imagen-de-inteligencia-artificial.webp" alt="ETL n8n" />
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                        <h5 class="fw-bold mb-1">ETL precios farmacéuticos</h5>
+                        <p class="text-secondary small mb-3">n8n • scraping • PostgreSQL</p>
+                        <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
+                            Flujo que integra precios actualizados a un sistema interno, con verificación y alertas. aaaaaaa
+                            asdasdas ma intea ssa
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj2">Ver detalle</a>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Item 1 -->
+                    <div class="swiper-slide portfolio-item">
+                    <div class="tk-card h-100 d-flex flex-column">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Toyota_Robot_at_Toyota_Kaikan.jpg" alt="Proyecto RAG" />
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                        <h5 class="fw-bold mb-1">Chatbot RAG para pedidos</h5>
+                        <p class="text-secondary small mb-3">LangChain • PDF pricing • Streamlit</p>
+                        <!-- Contenedor para descripción con scroll -->
+                        <div class="description flex-grow-1 mb-3" style="max-height:115px; overflow-y:auto;">
+                            Asistente que consulta menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como estas
+                            a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
+                            a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
+                            a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
+                            a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj1">Ver detalle</a>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="swiper-slide portfolio-item">
+                    <div class="tk-card h-100 d-flex flex-column">
+                        <img src="https://msmk.university/wp-content/uploads/2024/11/imagen-de-inteligencia-artificial.webp" alt="ETL n8n" />
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                        <h5 class="fw-bold mb-1">ETL precios farmacéuticos</h5>
+                        <p class="text-secondary small mb-3">n8n • scraping • PostgreSQL</p>
+                        <div class="description flex-grow-1 mb-3" style="max-height:115px; overflow-y:auto;">
+                            Flujo que integra precios actualizados a un sistema interno, con verificación y alertas. aaaaaaa
+                            asdasdas ma intea ssa
+                            Flujo que integra precios actualizados a un sistema interno, con verificación y alertas. aaaaaaa
+                            asdasdas ma intea ssa
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj2">Ver detalle</a>
+                        </div>
+                    </div>
+                    </div>
+
+
+
+                </div>
+                <!-- Controles -->
+                <div class="swiper-pagination"></div>
+            </div>
         </div>
-        <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
-            <button class="btn btn-outline-light active" data-filter="*">Todos</button>
-            <button class="btn btn-outline-light" data-filter="web">Web</button>
-            <button class="btn btn-outline-light" data-filter="data">Datos</button>
-            <button class="btn btn-outline-light" data-filter="ai">IA</button>
-            <button class="btn btn-outline-light" data-filter="automation">Automatización</button>
-        </div>
-        </div>
-
-        <!-- Slider -->
-        <div class="swiper portfolio-slider">
-        <div class="swiper-wrapper">
-
-            <!-- Item 1 -->
-            <div class="swiper-slide portfolio-item">
-            <div class="tk-card h-100 d-flex flex-column">
-                <img src="https://images.unsplash.com/photo-1483478550801-ceba5fe50e8e?q=80&w=1600&auto=format&fit=crop" alt="Proyecto RAG" />
-                <div class="p-4 d-flex flex-column flex-grow-1">
-                <h5 class="fw-bold mb-1">Chatbot RAG para pedidos</h5>
-                <p class="text-secondary small mb-3">LangChain • PDF pricing • Streamlit</p>
-                <!-- Contenedor para descripción con scroll -->
-                <div class="description flex-grow-1 mb-3" style="max-height:125px; overflow-y:auto;">
-                    Asistente que consulta menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como estas
-                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
-                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
-                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
-                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
-                </div>
-                <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj1">Ver detalle</a>
-                </div>
-            </div>
-            </div>
-
-
-            <!-- Item 2 -->
-            <div class="swiper-slide portfolio-item">
-            <div class="tk-card h-100 d-flex flex-column">
-                <img src="https://msmk.university/wp-content/uploads/2024/11/imagen-de-inteligencia-artificial.webp" alt="ETL n8n" />
-                <div class="p-4 d-flex flex-column flex-grow-1">
-                <h5 class="fw-bold mb-1">ETL precios farmacéuticos</h5>
-                <p class="text-secondary small mb-3">n8n • scraping • PostgreSQL</p>
-                <div class="description flex-grow-1 mb-3" style="max-height:125px; overflow-y:auto;">
-                    Flujo que integra precios actualizados a un sistema interno, con verificación y alertas. aaaaaaa
-                    asdasdas ma intea ssa
-                </div>
-                <a href="#" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#proj2">Ver detalle</a>
-                </div>
-            </div>
-            </div>
-
-            <!-- Item 1 -->
-            <div class="swiper-slide portfolio-item">
-            <div class="tk-card h-100 d-flex flex-column">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Toyota_Robot_at_Toyota_Kaikan.jpg" alt="Proyecto RAG" />
-                <div class="p-4 d-flex flex-column flex-grow-1">
-                <h5 class="fw-bold mb-1">Chatbot RAG para pedidos</h5>
-                <p class="text-secondary small mb-3">LangChain • PDF pricing • Streamlit</p>
-                <!-- Contenedor para descripción con scroll -->
-                <div class="description flex-grow-1 mb-3" style="max-height:125px; overflow-y:auto;">
-                    Asistente que consulta menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como estas
-                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
-                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
-                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
-                    a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
-                </div>
-                <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj1">Ver detalle</a>
-                </div>
-            </div>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="swiper-slide portfolio-item">
-            <div class="tk-card h-100 d-flex flex-column">
-                <img src="https://msmk.university/wp-content/uploads/2024/11/imagen-de-inteligencia-artificial.webp" alt="ETL n8n" />
-                <div class="p-4 d-flex flex-column flex-grow-1">
-                <h5 class="fw-bold mb-1">ETL precios farmacéuticos</h5>
-                <p class="text-secondary small mb-3">n8n • scraping • PostgreSQL</p>
-                <div class="description flex-grow-1 mb-3" style="max-height:125px; overflow-y:auto;">
-                    Flujo que integra precios actualizados a un sistema interno, con verificación y alertas. aaaaaaa
-                    asdasdas ma intea ssa
-                </div>
-                <a href="#" class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#proj2">Ver detalle</a>
-                </div>
-            </div>
-            </div>
-
-
-
-        </div>
-        <!-- Controles -->
-        <div class="swiper-pagination"></div>
-        </div>
-    </div>
     </section>
-
-    <!-- SwiperJS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-    const swiper = new Swiper('.portfolio-slider', {
-        slidesPerView: 1,
-        spaceBetween: 20,
-        loop: true,
-        autoplay: {
-        delay: 9000, // 9 segundos
-        disableOnInteraction: false,
-        },
-        pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-        },
-        navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-        },
-        breakpoints: {
-        768: { slidesPerView: 2 },
-        992: { slidesPerView: 3 }
-        }
-    });
-    </script>
-
-
+    
     <!-- BLOG -->
     <section id="blog">
         <div class="container">
-        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
             <div>
-            <h2 class="section-title">Blog</h2>
-            <p class="section-lead">Notas técnicas, tutoriales y experimentos.</p>
+                <h2 class="section-title">Blog</h2>
+                <p class="section-lead">Notas técnicas, tutoriales y experimentos.</p>
             </div>
-            <a href="#" class="btn btn-outline-light">Ver todos</a>
-        </div>
+            <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
+                <button class="btn btn-outline-light active" data-filter="*">Todos</button>
+                <button class="btn btn-outline-light" data-filter="web">Web</button>
+                <button class="btn btn-outline-light" data-filter="data">Datos</button>
+                <button class="btn btn-outline-light" data-filter="ai">IA</button>
+                <button class="btn btn-outline-light" data-filter="automation">Automatización</button>
+            </div>
+            </div>
 
-        <div class="row g-4">
-            <article class="col-md-6 col-lg-4">
-            <div class="tk-card blog-card h-100">
-                <img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1600&auto=format&fit=crop" alt="Post 1" />
-                <div class="p-4">
-                <h5 class="fw-bold">Optimizar vistas pesadas en PostgreSQL</h5>
-                <p class="small text-secondary">31 Ago 2025 • 8 min</p>
-                <p>Exploro estrategias para acelerar <code>vw_consumos</code>: índices, materialized views y particionado.</p>
-                <a class="stretched-link" href="#">Leer</a>
+            <!-- Slider -->
+            <div class="swiper portfolio-slider">
+                <div class="swiper-wrapper">
+
+                    <!-- Item 1 -->
+                    <div class="swiper-slide portfolio-item">
+                        <div class="tk-card h-100 d-flex flex-column">
+                            <img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1600&auto=format&fit=crop" alt="Post 1" />
+                            <div class="p-4 d-flex flex-column flex-grow-1">
+                                <h5 class="fw-bold mb-1">Chatbot RAG para pedidos</h5>
+                                <p class="text-secondary small mb-3">LangChain • PDF pricing • Streamlit</p>
+                                <!-- Contenedor para descripción con scroll -->
+                                <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
+                                    Asistente que consulta menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como estas
+
+                                </div>
+                                <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj1">Leer</a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+                <!-- Controles -->
+                <div class="swiper-pagination"></div>
             </div>
-            </article>
-            <article class="col-md-6 col-lg-4">
-            <div class="tk-card blog-card h-100">
-                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1600&auto=format&fit=crop" alt="Post 2" />
-                <div class="p-4">
-                <h5 class="fw-bold">RAG sin dolor con LangChain + PDFs</h5>
-                <p class="small text-secondary">04 Ago 2025 • 6 min</p>
-                <p>Cómo montar un pipeline de ingesta, chunking y búsqueda semántica para menús y precios.</p>
-                <a class="stretched-link" href="#">Leer</a>
-                </div>
-            </div>
-            </article>
-            <article class="col-md-6 col-lg-4">
-            <div class="tk-card blog-card h-100">
-                <img src="https://images.unsplash.com/photo-1551808525-51a94da548ce?q=80&w=1600&auto=format&fit=crop" alt="Post 3" />
-                <div class="p-4">
-                <h5 class="fw-bold">n8n + Django: Webhooks y OAuth</h5>
-                <p class="small text-secondary">29 Ago 2025 • 7 min</p>
-                <p>Configuración práctica de callbacks y despliegue seguro con túneles tipo ngrok.</p>
-                <a class="stretched-link" href="#">Leer</a>
-                </div>
-            </div>
-            </article>
-        </div>
         </div>
     </section>
 
@@ -521,6 +499,30 @@
         </div>
     </div>
 
+
+        <!-- SwiperJS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.portfolio-slider', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: true,
+            autoplay: {
+            delay: 9000, // 9 segundos
+            disableOnInteraction: false,
+            },
+            pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            },
+            breakpoints: {
+            768: { slidesPerView: 2 },
+            992: { slidesPerView: 3 }
+            }
+        });
+
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // ===== Utilidades =====
