@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'apps.index',
     'apps.curso',
     'apps.proyecto',
+    'apps.blog',
+    'apps.configuraciones',
+    'ckeditor',
+
 ]
 
 MIDDLEWARE = [

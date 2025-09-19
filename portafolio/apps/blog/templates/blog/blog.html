@@ -1,0 +1,50 @@
+{% extends "base/base_portafolio.html" %}
+{% load static %}
+{% block titulo %}Blog{% endblock %}
+{% block contenido %}
+<!-- BLOG -->
+<section id="blog">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+      <div>
+        <h2 class="section-title">Blog</h2>
+        <p class="section-lead">Notas técnicas, tutoriales y experimentos.</p>
+        <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
+          <button class="btn btn-outline-light active" data-filter="*">Todos</button>
+          <button class="btn btn-outline-light" data-filter="web">Web</button>
+          <button class="btn btn-outline-light" data-filter="data">Datos</button>
+          <button class="btn btn-outline-light" data-filter="ai">IA</button>
+          <button class="btn btn-outline-light" data-filter="automation">Automatización</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid de Cards -->
+    <div class="row g-4">
+      {% for blog in blogs %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="tk-card h-100 d-flex flex-column">
+          <img src="{{ blog.imagen.url }}" alt="{{ blog.titulo }}" class="card-img-top" />
+          <div class="p-4 d-flex flex-column flex-grow-1">
+            <h5 class="fw-bold mb-1">{{ blog.titulo }}</h5>
+            <p class="text-secondary small mb-3">
+              {% for cat in blog.categorias.all %}
+                {{ cat.nombre }}{% if not forloop.last %} • {% endif %}
+              {% endfor %}
+            </p>
+            <!-- Descripción con scroll si es muy larga -->
+            <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
+              {{ blog.descripcion|truncatechars:200 }}
+            </div>
+            <a href="{% url 'blog:blog_detail' blog.pk %}" class="btn btn-sm btn-outline-light mt-auto">Leer</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-light">No hay blogs publicados aún.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

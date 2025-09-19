@@ -14,6 +14,32 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
         <style>
 
+            footer {
+            border-top: 1px solid rgba(255,255,255,.08);
+            background: var(--tk-surface);
+            font-size: 1rem; /* 👈 antes era 0.9rem, ahora más grande */
+            color: var(--tk-muted);
+            }
+
+            footer .small {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 1rem; /* 👈 asegura que "small" no reduzca */
+            }
+
+            /* Contador más grande con animación */
+            footer .counter {
+            font-size: 1.3rem;
+            font-weight: 800;
+            animation: colorPulse 2s infinite alternate;
+            }
+
+            @keyframes colorPulse {
+            0%   { color: var(--tk-primary); text-shadow: 0 0 6px rgba(0,224,255,0.5); }
+            100% { color: var(--tk-accent);  text-shadow: 0 0 6px rgba(124,58,237,0.5); }
+            }
+
             .carousel-image {
                 animation: zoomAnimation 10s infinite;
                 }
@@ -180,6 +206,7 @@
             *{box-sizing:border-box}
             html, body{height:100%}
             body{
+                padding-top: 3.5rem;
             font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
             background: radial-gradient(circle at 20% 30%, rgba(0,224,255,0.15), transparent 40%),
                             radial-gradient(circle at 80% 70%, rgba(124,58,237,0.15), transparent 40%),
@@ -191,7 +218,7 @@
             /* Navbar */
             .navbar{
             background: rgba(18,24,33,.75);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(5px);
             border-bottom: 1px solid rgba(255,255,255,.06);
             }
             .navbar-brand strong{color:var(--tk-primary)}
@@ -272,15 +299,15 @@
             </button>
             <div class="collapse navbar-collapse" id="nav">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="#home">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="#about">Acerca de mí</a></li>
-                <li class="nav-item"><a class="nav-link" href="#portfolio">Proyectos</a></li>
-                <li class="nav-item"><a class="nav-link" href="#blog">Blog</a></li>
-                <li class="nav-item"><a class="nav-link" href="#cursos">Cursos</a></li>
-                <li class="nav-item"><a class="nav-link" href="#contact">Contacto</a></li>
-                <li class="nav-item ms-lg-3">
-                    <button id="themeToggle" class="btn btn-outline-light btn-sm" type="button" aria-label="Cambiar tema">Tema</button>
-                </li>
+                    <li class="nav-item"><a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% if request.path == '/' %}#{% else %}/{% endif %}" id="nav-inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#about">Acerca de mí</a></li>
+                    <li class="nav-item"><a class="nav-link {% if request.path == '/proyectos' %}active{% endif %}" href="{% url 'proyectos:proyectos_view' %}">Proyectos</a></li>
+                    <li class="nav-item"><a class="nav-link {% if request.path == '/blog' %}active{% endif %}" href="{% url 'blog:blog_view' %}">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#cursos">Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#contact">Contacto</a></li>
+                    <li class="nav-item ms-lg-3">
+                        <button id="themeToggle" class="btn btn-outline-light btn-sm" type="button" aria-label="Cambiar tema">Tema</button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -292,10 +319,45 @@
     <!-- FOOTER -->
     <footer class="py-4">
         <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
-        <div class="small">© <span id="year"></span> Tecno Kev — Kevin Agüero</div>
-        <div class="small text-secondary">Hecho con Bootstrap 5</div>
+            <div class="small">© <span id="year"></span> Tecno Kev — Kevin Agüero</div>
+            <div class="small">Visitas al sitio: <span id="visitor-count" class="counter">0</span></div>
         </div>
     </footer>
+    
+    <script>
+    function animateCounter(el, start, end, duration) {
+        let startTime = null;
+        function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        el.textContent = Math.floor(progress * (end - start) + start);
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        }
+        }
+        requestAnimationFrame(step);
+    }
+
+    fetch('https://visitor.6developer.com/visit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+        domain: window.location.hostname,
+        page_path: window.location.pathname
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const el = document.getElementById('visitor-count');
+        if (el && data.totalCount !== undefined) {
+        // ⏩ más rápido → duración más corta
+        animateCounter(el, 0, data.totalCount, 700);
+        }
+    })
+    .catch(err => console.error('Error al registrar visita:', err));
+    </script>
+
+
 
 
         <!-- SwiperJS -->
@@ -330,20 +392,7 @@
         // Año footer
         $('#year').textContent = new Date().getFullYear();
 
-        // Navbar active link on scroll
-        const sections = $$('#home, #about, #portfolio, #blog, #cursos,#contact');
-        const navLinks = $$('.nav-link');
-        const obs = new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{
-            if(e.isIntersecting){
-            navLinks.forEach(l=>l.classList.remove('active'));
-            const id = e.target.getAttribute('id');
-            const link = $(`.nav-link[href="#${id}"]`);
-            link && link.classList.add('active');
-            }
-        })
-        },{threshold:.6});
-        sections.forEach(s => obs.observe(s));
+
 
         // Reveal on scroll
         const revObs = new IntersectionObserver((entries)=>{
@@ -401,5 +450,28 @@
 
 
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+    // Activar el link clickeado
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            // Remover 'active' de todos los links
+            navLinks.forEach(l => l.classList.remove('active'));
+
+            // Agregar 'active' al link clickeado
+            this.classList.add('active');
+        });
+    });
+
+
+});
+</script>
+
+
+
+
     </body>
     </html>

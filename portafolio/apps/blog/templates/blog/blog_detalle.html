@@ -1,0 +1,37 @@
+{% extends "base/base_portafolio.html" %}
+{% load static %}
+{% block titulo %}Blog{% endblock %}
+{% block contenido %}
+<article class="blog-post">
+    <h1>{{ blog.titulo }}</h1>
+    <p>Por {{ blog.autor.get_full_name }} | {{ blog.fecha }}</p>
+    <img src="{{ blog.imagen.url }}" alt="{{ blog.titulo }}" class="img-fluid mb-3">
+    <div class="blog-contenido">
+        {{ blog.contenido|safe }}  <!-- muestra HTML formateado -->
+    </div>
+
+    <hr>
+    <h3>Comentarios</h3>
+    <div class="comentarios">
+    {% if comentarios %}
+        {% for comentario in comentarios %}
+        <div class="comentario mb-2">
+            <strong>{{ comentario.autor }}</strong> ({{ comentario.fecha|date:"d M Y H:i" }}):
+            <p>{{ comentario.contenido }}</p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No hay comentarios todavía.</p>
+    {% endif %}
+    </div>
+
+
+    <hr>
+    <h4>Deja tu comentario</h4>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+</article>
+{% endblock %}

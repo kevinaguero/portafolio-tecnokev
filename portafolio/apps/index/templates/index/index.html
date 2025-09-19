@@ -4,11 +4,11 @@
 {% block contenido %}
 
     <!-- HOME -->
-    <div class="container-fluid p-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container-fluid p-0 mb-5 wow fadeIn" id="home" data-wow-delay="0.1s">
         <div id="header-carousel" class="carousel slide" data-bs-ride="carousel" >
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                  <div id="home" class="hero position-relative">
+                  <div id="" class="hero position-relative">
                     <div class="hero__bg" id="parallaxBg" aria-hidden="true"></div>
                     <div class="hero__overlay" aria-hidden="true"></div>
                     <div class="glow" aria-hidden="true"></div>
@@ -18,7 +18,7 @@
                         <h1 class="mt-3">Hola, soy <span style="color:var(--tk-primary)">Kevin Agüero</span> — <span style="color:var(--tk-accent)">Tecno Kev</span></h1>
                         <p class="lead">Desarrollo soluciones end-to-end: desde backend y pipelines de datos, hasta interfaces modernas. Aquí comparto mi portafolio, artículos y notas técnicas.</p>
                         <div class="d-flex gap-3 justify-content-center mt-4">
-                            <a href="#portfolio" class="btn btn-primary btn-lg">Ver proyectos</a>
+                            <a href="#proyectos" class="btn btn-primary btn-lg">Ver proyectos</a>
                             <a href="#contact" class="btn btn-outline-light btn-lg">Hablemos</a>
                         </div>
                         <img src="{% static 'img/silueta.png' %}" alt="silueta kev" class="hero-silueta" />
@@ -80,6 +80,7 @@
         </div>
     </div>
 
+
     <!-- ABOUT -->
     <section id="about" class="position-relative">
         <div class="container">
@@ -137,117 +138,74 @@
         </div>
     </section>
 
-    <!-- PORTFOLIO / PROYECTOS -->
-    <section id="portfolio">
+    {% if proyectos %}
+    <section id="proyectos">
         <div class="container">
             <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
                 <div>
                     <h2 class="section-title">Proyectos</h2>
                     <p class="section-lead">Algunos trabajos recientes. Filtrá por categoría.</p>
-                    <a href="#" class="btn btn-outline-light mt-2">Ver todos</a>
+                    <a href="{% url 'proyectos:proyectos_view' %}" class="btn btn-outline-light mt-2">Ver todos</a>
                 </div>
+
+                {% if proyectos|length > 3 %}
                 <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
                     <button class="btn btn-outline-light active" data-filter="*">Todos</button>
-                    <button class="btn btn-outline-light" data-filter="web">Web</button>
-                    <button class="btn btn-outline-light" data-filter="data">Datos</button>
-                    <button class="btn btn-outline-light" data-filter="ai">IA</button>
-                    <button class="btn btn-outline-light" data-filter="automation">Automatización</button>
+                    {% for categoria in categorias %}
+                        <button class="btn btn-outline-light" data-filter="{{ categoria.slug }}">
+                            {{ categoria.nombre }}
+                        </button>
+                    {% endfor %}
                 </div>
+                {% endif %}
             </div>
 
             <!-- Slider -->
-            <div class="swiper portfolio-slider">
+            <div id="portfolioGrid" class="swiper portfolio-slider">
                 <div class="swiper-wrapper">
-
-                    <!-- Item 1 -->
-                    <div class="swiper-slide portfolio-item">
-                    <div class="tk-card h-100 d-flex flex-column">
-                        <img src="https://images.unsplash.com/photo-1483478550801-ceba5fe50e8e?q=80&w=1600&auto=format&fit=crop" alt="Proyecto RAG" />
-                        <div class="p-4 d-flex flex-column flex-grow-1">
-                        <h5 class="fw-bold mb-1">Chatbot RAG para pedidos</h5>
-                        <p class="text-secondary small mb-3">LangChain • PDF pricing • Streamlit</p>
-                        <!-- Contenedor para descripción con scroll -->
-                        <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
-                            Asistente que consulta menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como estas
-
-                        </div>
-                            <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj1">Ver proyecto</a>
-                        </div>
-                    </div>
-                    </div>
-
-
-                    <!-- Item 2 -->
-                    <div class="swiper-slide portfolio-item">
-                    <div class="tk-card h-100 d-flex flex-column">
-                        <img src="https://msmk.university/wp-content/uploads/2024/11/imagen-de-inteligencia-artificial.webp" alt="ETL n8n" />
-                        <div class="p-4 d-flex flex-column flex-grow-1">
-                        <h5 class="fw-bold mb-1">ETL precios farmacéuticos</h5>
-                        <p class="text-secondary small mb-3">n8n • scraping • PostgreSQL</p>
-                        <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
-                            Flujo que integra precios actualizados a un sistema interno, con verificación y alertas. aaaaaaa
-                            asdasdas ma intea ssa
-                        </div>
-                        <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj2">Ver detalle</a>
+                    {% for proyecto in proyectos %}
+                    <div class="swiper-slide portfolio-item" data-cat="{{ proyecto.categorias.all|join:' ' }}">
+                        <div class="tk-card h-100 d-flex flex-column">
+                            <img src="{{ proyecto.imagen.url }}" alt="{{ proyecto.titulo }}" />
+                            <div class="p-4 d-flex flex-column flex-grow-1">
+                                <h5 class="fw-bold mb-1">{{ proyecto.titulo }}</h5>
+                                <p class="text-secondary small mb-3">
+                                    {{ proyecto.categorias.all|join:' • ' }}
+                                </p>
+                                <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
+                                    {{ proyecto.descripcion|truncatewords:30 }}
+                                </div>
+                                {% if proyecto.titulo_boton %}
+                                    <a href="#" class="btn btn-sm btn-outline-light mt-auto">{{ proyecto.titulo_boton }}</a>
+                                {% endif %}
+                                
+                                {% if proyecto.link_github %}
+                                    <a href="{{ proyecto.link_github }}" class="btn btn-sm btn-outline-light mt-auto" target="_blank">
+                                        Ver código
+                                    </a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                    </div>
-
-                    <!-- Item 1 -->
-                    <div class="swiper-slide portfolio-item">
-                    <div class="tk-card h-100 d-flex flex-column">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Toyota_Robot_at_Toyota_Kaikan.jpg" alt="Proyecto RAG" />
-                        <div class="p-4 d-flex flex-column flex-grow-1">
-                        <h5 class="fw-bold mb-1">Chatbot RAG para pedidos</h5>
-                        <p class="text-secondary small mb-3">LangChain • PDF pricing • Streamlit</p>
-                        <!-- Contenedor para descripción con scroll -->
-                        <div class="description flex-grow-1 mb-3" style="max-height:115px; overflow-y:auto;">
-                            Asistente que consulta menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como estas
-                            a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
-                            a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
-                            a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
-                            a menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como
-                        </div>
-                        <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj1">Ver detalle</a>
-                        </div>
-                    </div>
-                    </div>
-
-                    <!-- Item 2 -->
-                    <div class="swiper-slide portfolio-item">
-                    <div class="tk-card h-100 d-flex flex-column">
-                        <img src="https://msmk.university/wp-content/uploads/2024/11/imagen-de-inteligencia-artificial.webp" alt="ETL n8n" />
-                        <div class="p-4 d-flex flex-column flex-grow-1">
-                        <h5 class="fw-bold mb-1">ETL precios farmacéuticos</h5>
-                        <p class="text-secondary small mb-3">n8n • scraping • PostgreSQL</p>
-                        <div class="description flex-grow-1 mb-3" style="max-height:115px; overflow-y:auto;">
-                            Flujo que integra precios actualizados a un sistema interno, con verificación y alertas. aaaaaaa
-                            asdasdas ma intea ssa
-                            Flujo que integra precios actualizados a un sistema interno, con verificación y alertas. aaaaaaa
-                            asdasdas ma intea ssa
-                        </div>
-                        <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj2">Ver detalle</a>
-                        </div>
-                    </div>
-                    </div>
-
-
-
+                    {% endfor %}
                 </div>
-                <!-- Controles -->
                 <div class="swiper-pagination"></div>
             </div>
         </div>
     </section>
+    {% endif %}
+
+
     
     <!-- BLOG -->
+    {% if blogs %}
     <section id="blog">
         <div class="container">
             <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
                 <div>
                     <h2 class="section-title">Blog</h2>
                     <p class="section-lead">Notas técnicas, tutoriales y experimentos.</p>
-                    <a href="#" class="btn btn-outline-light mt-2">Ver todos</a>
+                    <a href="{%url 'blog:blog_view' %}" class="btn btn-outline-light mt-2">Ver todos</a>
                 </div>
                 <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
                     <button class="btn btn-outline-light active" data-filter="*">Todos</button>
@@ -285,95 +243,98 @@
             </div>
         </div>
     </section>
+    {% endif %}
 
     <!-- CURSOS -->
+     {% if cursos %}
     <section id="cursos">
-    <div class="container">
-        <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
-            <div>
-                <h2 class="section-title">Cursos</h2>
-                <p class="section-lead">Formación y talleres que ofrezco.</p>
-                <a href="{% url 'curso:cursos' %}" class="btn btn-outline-light mt-2">Ver todos</a>
-            </div>
-            <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
-                <button class="btn btn-outline-light active" data-filter="*">Todos</button>
-                <button class="btn btn-outline-light" data-filter="web">Web</button>
-                <button class="btn btn-outline-light" data-filter="data">Datos</button>
-                <button class="btn btn-outline-light" data-filter="ai">IA</button>
-                <button class="btn btn-outline-light" data-filter="automation">Automatización</button>
-            </div>
-        </div>
-
-        <!-- Slider -->
-        <div class="swiper portfolio-slider">
-        <div class="swiper-wrapper">
-
-            <!-- Curso 1 -->
-            <div class="swiper-slide portfolio-item">
-            <div class="tk-card h-100 d-flex flex-column">
-                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1600&auto=format&fit=crop" alt="Curso LangChain" />
-                <div class="p-4 d-flex flex-column flex-grow-1">
-                <h5 class="fw-bold mb-1">Curso LangChain + RAG</h5>
-                <p class="text-secondary small mb-3">Chatbots • PDFs • OpenAI/Groq</p>
-                <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
-                    Aprende a construir un asistente que consulta menús y precios desde PDFs con recuperación semántica, validación y logs.
+        <div class="container">
+            <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+                <div>
+                    <h2 class="section-title">Cursos</h2>
+                    <p class="section-lead">Formación y talleres que ofrezco.</p>
+                    <a href="/" class="btn btn-outline-light mt-2">Ver todos</a>
                 </div>
-                <a href="#" class="btn btn-sm btn-outline-light mt-auto">Ver curso</a>
+                <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
+                    <button class="btn btn-outline-light active" data-filter="*">Todos</button>
+                    <button class="btn btn-outline-light" data-filter="web">Web</button>
+                    <button class="btn btn-outline-light" data-filter="data">Datos</button>
+                    <button class="btn btn-outline-light" data-filter="ai">IA</button>
+                    <button class="btn btn-outline-light" data-filter="automation">Automatización</button>
                 </div>
             </div>
-            </div>
 
-            <!-- Curso 2 -->
-            <div class="swiper-slide portfolio-item">
+            <!-- Slider -->
+            <div class="swiper portfolio-slider">
+            <div class="swiper-wrapper">
+
+                <!-- Curso 1 -->
+                <div class="swiper-slide portfolio-item">
                 <div class="tk-card h-100 d-flex flex-column">
-                    <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437e0?q=80&w=1600&auto=format&fit=crop" alt="Curso n8n" />
+                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1600&auto=format&fit=crop" alt="Curso LangChain" />
                     <div class="p-4 d-flex flex-column flex-grow-1">
-                    <h5 class="fw-bold mb-1">Automatización con n8n</h5>
-                    <p class="text-secondary small mb-3">ETL • Scraping • Integraciones</p>
+                    <h5 class="fw-bold mb-1">Curso LangChain + RAG</h5>
+                    <p class="text-secondary small mb-3">Chatbots • PDFs • OpenAI/Groq</p>
                     <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
-                        Flujo de datos con scraping responsable, PostgreSQL y alertas en tiempo real.
+                        Aprende a construir un asistente que consulta menús y precios desde PDFs con recuperación semántica, validación y logs.
                     </div>
                     <a href="#" class="btn btn-sm btn-outline-light mt-auto">Ver curso</a>
                     </div>
                 </div>
-            </div>
+                </div>
 
-            <!-- Curso 2 -->
-            <div class="swiper-slide portfolio-item">
-                <div class="tk-card h-100 d-flex flex-column">
-                    <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437e0?q=80&w=1600&auto=format&fit=crop" alt="Curso n8n" />
-                    <div class="p-4 d-flex flex-column flex-grow-1">
-                    <h5 class="fw-bold mb-1">Automatización con n8n</h5>
-                    <p class="text-secondary small mb-3">ETL • Scraping • Integraciones</p>
-                    <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
-                        Flujo de datos con scraping responsable, PostgreSQL y alertas en tiempo real.
-                    </div>
-                    <a href="#" class="btn btn-sm btn-outline-light mt-auto">Ver curso</a>
+                <!-- Curso 2 -->
+                <div class="swiper-slide portfolio-item">
+                    <div class="tk-card h-100 d-flex flex-column">
+                        <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437e0?q=80&w=1600&auto=format&fit=crop" alt="Curso n8n" />
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                        <h5 class="fw-bold mb-1">Automatización con n8n</h5>
+                        <p class="text-secondary small mb-3">ETL • Scraping • Integraciones</p>
+                        <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
+                            Flujo de datos con scraping responsable, PostgreSQL y alertas en tiempo real.
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-light mt-auto">Ver curso</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Curso 2 -->
-            <div class="swiper-slide portfolio-item">
-                <div class="tk-card h-100 d-flex flex-column">
-                    <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437e0?q=80&w=1600&auto=format&fit=crop" alt="Curso n8n" />
-                    <div class="p-4 d-flex flex-column flex-grow-1">
-                    <h5 class="fw-bold mb-1">Automatización con n8n</h5>
-                    <p class="text-secondary small mb-3">ETL • Scraping • Integraciones</p>
-                    <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
-                        Flujo de datos con scraping responsable, PostgreSQL y alertas en tiempo real.
-                    </div>
-                    <a href="#" class="btn btn-sm btn-outline-light mt-auto">Ver curso</a>
+                <!-- Curso 2 -->
+                <div class="swiper-slide portfolio-item">
+                    <div class="tk-card h-100 d-flex flex-column">
+                        <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437e0?q=80&w=1600&auto=format&fit=crop" alt="Curso n8n" />
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                        <h5 class="fw-bold mb-1">Automatización con n8n</h5>
+                        <p class="text-secondary small mb-3">ETL • Scraping • Integraciones</p>
+                        <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
+                            Flujo de datos con scraping responsable, PostgreSQL y alertas en tiempo real.
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-light mt-auto">Ver curso</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+                <!-- Curso 2 -->
+                <div class="swiper-slide portfolio-item">
+                    <div class="tk-card h-100 d-flex flex-column">
+                        <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437e0?q=80&w=1600&auto=format&fit=crop" alt="Curso n8n" />
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                        <h5 class="fw-bold mb-1">Automatización con n8n</h5>
+                        <p class="text-secondary small mb-3">ETL • Scraping • Integraciones</p>
+                        <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
+                            Flujo de datos con scraping responsable, PostgreSQL y alertas en tiempo real.
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-light mt-auto">Ver curso</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Paginación -->
+            <div class="swiper-pagination"></div>
+            </div>
         </div>
-        <!-- Paginación -->
-        <div class="swiper-pagination"></div>
-        </div>
-    </div>
     </section>
+    {% endif %}
 
     <!-- CONTACTO -->
     <section id="contact">
@@ -397,4 +358,5 @@
         </div>
         </div>
     </section>
+
 {%endblock%}

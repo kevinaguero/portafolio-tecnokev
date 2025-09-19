@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 
-def cursos(request):
+def cursos_view(request):
     #productos = Producto.objects.filter(vigencia=True)
     #data = {
     #    'productos': productos,
