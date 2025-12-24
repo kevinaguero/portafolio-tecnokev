@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'apps.proyecto',
     'apps.blog',
     'apps.configuraciones',
-    'ckeditor',
+    # 'ckeditor',  # Comentado temporalmente
 
 ]
 

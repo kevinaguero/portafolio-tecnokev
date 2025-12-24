@@ -3,28 +3,32 @@
 {% block titulo %}Blog{% endblock %}
 {% block contenido %}
 <!-- BLOG -->
-<section id="blog">
+<section id="blog" class="reveal">
   <div class="container">
     <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
-      <div>
+      <div class="reveal-left">
         <h2 class="section-title">Blog</h2>
         <p class="section-lead">Notas técnicas, tutoriales y experimentos.</p>
-        <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
-          <button class="btn btn-outline-light active" data-filter="*">Todos</button>
-          <button class="btn btn-outline-light" data-filter="web">Web</button>
-          <button class="btn btn-outline-light" data-filter="data">Datos</button>
-          <button class="btn btn-outline-light" data-filter="ai">IA</button>
-          <button class="btn btn-outline-light" data-filter="automation">Automatización</button>
-        </div>
       </div>
+      
+      {% if blogs|length > 0 and categorias %}
+      <div class="portafolio-filters btn-group" id="filtros-blog-page" role="group" aria-label="Filtros de blog">
+        <button class="btn btn-outline-light active" data-filter="*">Todos</button>
+        {% for categoria in categorias %}
+        <button class="btn btn-outline-light" data-filter="{{ categoria.id }}">
+          {{ categoria.nombre }}
+        </button>
+        {% endfor %}
+      </div>
+      {% endif %}
     </div>
 
     <!-- Grid de Cards -->
-    <div class="row g-4">
+    <div class="row g-4" id="blog-grid">
       {% for blog in blogs %}
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="tk-card h-100 d-flex flex-column">
-          <img src="{{ blog.imagen.url }}" alt="{{ blog.titulo }}" class="card-img-top" />
+      <div class="col-12 col-md-6 col-lg-4 blog-card" data-categorias="{% for cat in blog.categorias.all %}{{ cat.id }}{% if not forloop.last %} {% endif %}{% endfor %}">
+        <div class="tk-card h-100 d-flex flex-column reveal">
+          <img src="{{ blog.imagen.url }}" alt="{{ blog.titulo }}" class="card-img-top" style="height: 220px; object-fit: cover;" />
           <div class="p-4 d-flex flex-column flex-grow-1">
             <h5 class="fw-bold mb-1">{{ blog.titulo }}</h5>
             <p class="text-secondary small mb-3">
@@ -41,10 +45,64 @@
         </div>
       </div>
       {% empty %}
-      <p class="text-light">No hay blogs publicados aún.</p>
+      <div class="col-12">
+        <p class="text-center text-secondary">No hay blogs publicados aún.</p>
+      </div>
       {% endfor %}
     </div>
   </div>
 </section>
 
+<!-- JavaScript para filtros -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('#filtros-blog-page .btn');
+    const blogCards = document.querySelectorAll('.blog-card');
+
+    console.log('Total cards:', blogCards.length);
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remover active de todos los botones
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Agregar active al botón clickeado
+            this.classList.add('active');
+
+            const filterValue = this.getAttribute('data-filter');
+            console.log('Filtrando por:', filterValue);
+
+            blogCards.forEach(card => {
+                const categorias = card.getAttribute('data-categorias');
+                console.log('Card categorías:', categorias);
+                
+                if (filterValue === '*') {
+                    // Mostrar todas
+                    card.classList.remove('d-none');
+                    card.style.display = '';
+                } else if (categorias) {
+                    // Dividir las categorías por espacios y verificar si incluye la categoría filtrada
+                    const categoriasArray = categorias.trim().split(/\s+/).filter(c => c.length > 0);
+                    console.log('Array de categorías:', categoriasArray);
+                    
+                    // Comparar como strings
+                    const hasCategory = categoriasArray.some(cat => cat === filterValue);
+                    console.log('Tiene categoría?', hasCategory);
+                    
+                    if (hasCategory) {
+                        // Mostrar si tiene la categoría
+                        card.classList.remove('d-none');
+                        card.style.display = '';
+                    } else {
+                        // Ocultar si no tiene la categoría
+                        card.classList.add('d-none');
+                    }
+                } else {
+                    // Ocultar si no tiene categorías
+                    card.classList.add('d-none');
+                }
+            });
+        });
+    });
+});
+</script>
 {% endblock %}

@@ -2,7 +2,119 @@
 {% load static %}
 {% block titulo %}Proyectos{% endblock %}
 {% block contenido %}
-    <div>
-        <h5>hola</h5>
+<!-- PROYECTOS -->
+<section id="proyectos" class="reveal">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+      <div class="reveal-left">
+        <h2 class="section-title">Proyectos</h2>
+        <p class="section-lead">Todos mis proyectos y trabajos. Filtra por categoría.</p>
+      </div>
+      
+      {% if proyectos|length > 0 and categorias %}
+      <div class="portafolio-filters btn-group" id="filtros-proyectos-page" role="group" aria-label="Filtros de proyectos">
+        <button class="btn btn-outline-light active" data-filter="*">Todos</button>
+        {% for categoria in categorias %}
+        <button class="btn btn-outline-light" data-filter="{{ categoria.id }}">
+          {{ categoria.nombre }}
+        </button>
+        {% endfor %}
+      </div>
+      {% endif %}
     </div>
+
+    <!-- Grid de Cards -->
+    <div class="row g-4" id="proyectos-grid">
+      {% for proyecto in proyectos %}
+      <div class="col-12 col-md-6 col-lg-4 proyecto-card" data-categorias="{% for cat in proyecto.categorias.all %}{{ cat.id }}{% if not forloop.last %} {% endif %}{% endfor %}">
+        <div class="tk-card h-100 d-flex flex-column reveal">
+          <img src="{{ proyecto.imagen.url }}" alt="{{ proyecto.titulo }}" class="card-img-top" style="height: 220px; object-fit: cover;" />
+          <div class="p-4 d-flex flex-column flex-grow-1">
+            <h5 class="fw-bold mb-1">{{ proyecto.titulo }}</h5>
+            <p class="text-secondary small mb-3">
+              {% for cat in proyecto.categorias.all %}
+                {{ cat.nombre }}{% if not forloop.last %} • {% endif %}
+              {% endfor %}
+            </p>
+            <!-- Descripción con scroll si es muy larga -->
+            <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
+              {{ proyecto.descripcion|truncatechars:200 }}
+            </div>
+            <!-- Botones -->
+            <div class="d-flex gap-2 mt-auto">
+              {% if proyecto.titulo_boton and proyecto.link_boton %}
+              <a href="{{ proyecto.link_boton }}" class="btn btn-sm btn-outline-light" target="_blank">
+                {{ proyecto.titulo_boton }}
+              </a>
+              {% endif %}
+              {% if proyecto.link_github %}
+              <a href="{{ proyecto.link_github }}" class="btn btn-sm btn-outline-light" target="_blank">
+                <i class="fab fa-github me-1"></i>Código
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <p class="text-center text-secondary">No hay proyectos publicados aún.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- JavaScript para filtros -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('#filtros-proyectos-page .btn');
+    const proyectoCards = document.querySelectorAll('.proyecto-card');
+
+    console.log('Total cards:', proyectoCards.length);
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remover active de todos los botones
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Agregar active al botón clickeado
+            this.classList.add('active');
+
+            const filterValue = this.getAttribute('data-filter');
+            console.log('Filtrando por:', filterValue);
+
+            proyectoCards.forEach(card => {
+                const categorias = card.getAttribute('data-categorias');
+                console.log('Card categorías:', categorias);
+                
+                if (filterValue === '*') {
+                    // Mostrar todas
+                    card.classList.remove('d-none');
+                    card.style.display = '';
+                } else if (categorias) {
+                    // Dividir las categorías por espacios y verificar si incluye la categoría filtrada
+                    const categoriasArray = categorias.trim().split(/\s+/).filter(c => c.length > 0);
+                    console.log('Array de categorías:', categoriasArray);
+                    
+                    // Comparar como strings
+                    const hasCategory = categoriasArray.some(cat => cat === filterValue);
+                    console.log('Tiene categoría?', hasCategory);
+                    
+                    if (hasCategory) {
+                        // Mostrar si tiene la categoría
+                        card.classList.remove('d-none');
+                        card.style.display = '';
+                    } else {
+                        // Ocultar si no tiene la categoría
+                        card.classList.add('d-none');
+                    }
+                } else {
+                    // Ocultar si no tiene categorías
+                    card.classList.add('d-none');
+                }
+            });
+        });
+    });
+});
+</script>
 {% endblock %}

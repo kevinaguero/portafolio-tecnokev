@@ -5,13 +5,14 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{% block titulo %}{% endblock %}</title>
-        <meta name="description" content="Portfolio, blog y proyectos de Kevin Agüero (Tecno Kev). Desarrollo, datos y automatización." />
+        <meta name="description" content="portafolio, blog y proyectos de Kevin Agüero (Tecno Kev). Desarrollo, datos y automatización." />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="icon" href="/favicon.ico">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <link rel="stylesheet" href="{% static 'css/modern-styles.css' %}">
         <style>
 
             footer {
@@ -160,17 +161,15 @@
             }
         </style>
         <style>
-            
-
             .hero-silueta {
                 position: absolute;
-                bottom: -200px;
+                bottom: -220px;
                 left: 0;              /* cambialo a left:0; si querés a la izquierda */
                 width: 350px;          /* ajustá el tamaño a gusto */
                 max-width: 40%;        /* responsivo */
                 pointer-events: none;  /* que no interfiera con clics */
                 user-select: none;     /* que no se seleccione por error */
-                z-index: -2;            /* arriba del fondo, pero detrás del contenido */
+                z-index: 1;            /* arriba del fondo, pero detrás del contenido */
                 opacity: 0.9;          /* un poco traslúcido para no robar atención */
             }
 
@@ -180,7 +179,7 @@
                 padding-bottom: 40px; /* espacio alrededor de las slides */
             }
 
-            .portfolio-item .tk-card{
+            .proyecto-item .tk-card{
                 min-height: 500px;
                 max-height: 500px;
             }
@@ -207,12 +206,14 @@
             html, body{height:100%}
             body{
                 padding-top: 3.5rem;
-            font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-            background: radial-gradient(circle at 20% 30%, rgba(0,224,255,0.15), transparent 40%),
+                font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+                background: radial-gradient(circle at 20% 30%, rgba(0,224,255,0.15), transparent 40%),
                             radial-gradient(circle at 80% 70%, rgba(124,58,237,0.15), transparent 40%),
                             linear-gradient(135deg, #0b0f14 0%, #121821 50%, #1a1030 100%);
-            background-attachment: fixed;color: var(--tk-text);
-            letter-spacing:.1px;
+                background-attachment: fixed;
+                color: var(--text-primary);
+                letter-spacing:.1px;
+                transition: background 0.5s ease, color 0.3s ease;
             }
 
             /* Navbar */
@@ -222,13 +223,6 @@
             border-bottom: 1px solid rgba(255,255,255,.06);
             }
             .navbar-brand strong{color:var(--tk-primary)}
-            .nav-link{position:relative}
-            .nav-link.active, .nav-link:hover{color:var(--tk-primary)!important}
-            .nav-link::after{
-            content:""; position:absolute; left:.5rem; right:.5rem; bottom:.3rem; height:2px;
-            background: var(--tk-primary); transform: scaleX(0); transform-origin:left; transition:.25s ease;
-            }
-            .nav-link:hover::after{transform: scaleX(1)}
 
             /* Hero Parallax */
             .hero{
@@ -242,9 +236,9 @@
             filter: saturate(1.1) contrast(1.05) brightness(.9);
             }
             .hero__overlay{ position:absolute; inset:0; background: radial-gradient(ellipse at 30% 20%, rgba(124,58,237,.35), transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(0,224,255,.35), transparent 50%), linear-gradient(to bottom, rgba(11,15,20,.6), rgba(11,15,20,.95)); }
-            .hero__content{ position:relative; z-index:2; padding: 0 1rem }
+            .hero__content{ position:relative; z-index:2; padding: 0 1rem; overflow: visible; }
             .badge-tech{background: rgba(0,224,255,.15); color: var(--tk-primary); border:1px solid rgba(0,224,255,.35)}
-            .hero h1{ font-weight:800; font-size: clamp(2.2rem, 5vw, 4.2rem); line-height:1.05; }
+            .hero h1{ font-weight:800; font-size: clamp(2.2rem, 5vw, 4.2rem); line-height:1.15; overflow: visible; }
             .hero p{ color: var(--tk-muted); max-width: 62ch; margin: 1rem auto 0 }
 
             .glow{position:absolute; inset: -20% -10% -10% -10%; background: var(--tk-gradient); filter: blur(60px); opacity:.45; z-index:0}
@@ -258,13 +252,13 @@
             .tk-card{background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)); border:1px solid rgba(255,255,255,.08); border-radius:1.25rem; overflow:hidden}
             .tk-card:hover{border-color: rgba(0,224,255,.5); box-shadow:0 10px 30px rgba(0,224,255,.08)}
 
-            /* Portfolio grid */
-            .portfolio-filters .btn{border-color: rgba(255,255,255,.14)}
-            .portfolio-filters .btn.active{background: var(--tk-primary); color:#00131a; border-color:transparent}
-            .portfolio-item img{width:100%; height:220px; object-fit:cover}
+            /* portafolio grid */
+            .portafolio-filters .btn{border-color: rgba(255,255,255,.14)}
+            .portafolio-filters .btn.active{background: var(--tk-primary); color:#00131a; border-color:transparent}
+            .portafolio-item img{width:100%; height:220px; object-fit:cover}
 
             /* Blog cards */
-            .blog-card img{height:170px; object-fit:cover}
+            .blog-card img{height:220px; object-fit:cover}
 
             /* About */
             .about-avatar{width:110px; height:110px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.2)}
@@ -290,6 +284,11 @@
         </style>
     </head>
     <body>
+    <!-- LOADING SCREEN -->
+    <div class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+    
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
@@ -303,10 +302,13 @@
                     <li class="nav-item"><a class="nav-link" href="/#about">Acerca de mí</a></li>
                     <li class="nav-item"><a class="nav-link {% if request.path == '/proyectos' %}active{% endif %}" href="{% url 'proyectos:proyectos_view' %}">Proyectos</a></li>
                     <li class="nav-item"><a class="nav-link {% if request.path == '/blog' %}active{% endif %}" href="{% url 'blog:blog_view' %}">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/#cursos">Cursos</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="/#cursos">Cursos</a></li> -->
                     <li class="nav-item"><a class="nav-link" href="/#contact">Contacto</a></li>
                     <li class="nav-item ms-lg-3">
-                        <button id="themeToggle" class="btn btn-outline-light btn-sm" type="button" aria-label="Cambiar tema">Tema</button>
+                        <button id="themeToggle" class="btn btn-outline-light btn-sm" type="button" aria-label="Cambiar tema">
+                            <i class="fas fa-sun icon sun-icon"></i>
+                            <i class="fas fa-moon icon moon-icon"></i>
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -317,12 +319,395 @@
     {%endblock%}
 
     <!-- FOOTER -->
-    <footer class="py-4">
-        <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
-            <div class="small">© <span id="year"></span> Tecno Kev — Kevin Agüero</div>
-            <div class="small">Visitas al sitio: <span id="visitor-count" class="counter">0</span></div>
+    <footer class="modern-footer">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <!-- Sobre mí -->
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="footer-title mb-3">
+                        <span class="gradient-text">Tecno Kev</span>
+                    </h5>
+                    <p class="footer-text mb-3">Desarrollador Full Stack especializado en crear experiencias web modernas y funcionales. De Catamarca, Argentina para el mundo.</p>
+                    <div class="footer-social">
+                        <a href="#" target="_blank" rel="noreferrer" class="social-icon-footer" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" target="_blank" rel="noreferrer" class="social-icon-footer" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" target="_blank" rel="noreferrer" class="social-icon-footer" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="mailto:contacto@tecnokev.dev" class="social-icon-footer" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Enlaces rápidos -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="footer-title-small mb-3">Navegación</h6>
+                    <ul class="footer-links">
+                        <li><a href="{% if request.path == '/' %}#{% else %}/{% endif %}">Inicio</a></li>
+                        <li><a href="/#about">Acerca de mí</a></li>
+                        <li><a href="{% url 'proyectos:proyectos_view' %}">Proyectos</a></li>
+                        <li><a href="{% url 'blog:blog_view' %}">Blog</a></li>
+                        <li><a href="/#contact">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <!-- Tecnologías -->
+                <div class="col-lg-3 col-md-6 col-6">
+                    <h6 class="footer-title-small mb-3">Stack Tecnológico</h6>
+                    <div class="tech-badges">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Django</span>
+                        <span class="tech-badge">JavaScript</span>
+                        <span class="tech-badge">React</span>
+                        <span class="tech-badge">PostgreSQL</span>
+                        <span class="tech-badge">Docker</span>
+                    </div>
+                </div>
+
+                <!-- Stats y contacto -->
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="footer-title-small mb-3">Estadísticas</h6>
+                    <div class="footer-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <div class="stat-info">
+                                <span class="stat-number" id="visitor-count">0</span>
+                                <span class="stat-label">Visitas totales</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="stat-info">
+                                <span class="stat-number">24-48h</span>
+                                <span class="stat-label">Tiempo de respuesta</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="stat-info">
+                                <span class="stat-number">UTC-3</span>
+                                <span class="stat-label">Catamarca, ARG</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Línea divisoria -->
+            <div class="footer-divider"></div>
+
+            <!-- Copyright y créditos -->
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <span>© <span id="year"></span> <strong>Tecno Kev</strong> — Kevin Agüero</span>
+                    <span class="separator">•</span>
+                    <span>Hecho con <i class="fas fa-heart heart-icon"></i> y mucho <i class="fas fa-coffee coffee-icon"></i></span>
+                </div>
+                <div class="footer-meta">
+                    <span>Desarrollado con Django & Bootstrap</span>
+                </div>
+            </div>
         </div>
+
+        <!-- Efecto de partículas sutil en el footer -->
+        <div class="footer-glow"></div>
     </footer>
+
+    <!-- Estilos del footer moderno -->
+    <style>
+    .modern-footer {
+        background: linear-gradient(180deg, 
+            rgba(17, 24, 39, 0.95) 0%, 
+            rgba(31, 41, 55, 0.98) 50%, 
+            rgba(17, 24, 39, 1) 100%);
+        padding: 4rem 0 2rem;
+        position: relative;
+        overflow: hidden;
+        border-top: 1px solid rgba(0, 224, 255, 0.1);
+    }
+
+    [data-bs-theme="light"] .modern-footer {
+        background: linear-gradient(180deg, 
+            rgba(249, 250, 251, 0.95) 0%, 
+            rgba(243, 244, 246, 0.98) 50%, 
+            rgba(249, 250, 251, 1) 100%);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .footer-glow {
+        position: absolute;
+        top: -50%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 100%;
+        background: radial-gradient(ellipse at center, 
+            rgba(0, 224, 255, 0.08) 0%, 
+            transparent 70%);
+        pointer-events: none;
+        animation: footerGlow 8s ease-in-out infinite;
+    }
+
+    @keyframes footerGlow {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.6; }
+    }
+
+    .footer-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .gradient-text {
+        background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .footer-text {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .footer-social {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .social-icon-footer {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 224, 255, 0.1);
+        border: 1px solid rgba(0, 224, 255, 0.2);
+        border-radius: 10px;
+        color: var(--accent-cyan);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+    }
+
+    .social-icon-footer:hover {
+        background: var(--accent-cyan);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 20px rgba(0, 224, 255, 0.4);
+    }
+
+    .footer-title-small {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        position: relative;
+        display: inline-block;
+    }
+
+    .footer-title-small::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 30px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent-cyan), transparent);
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 0.5rem;
+    }
+
+    .footer-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .footer-links a:hover {
+        color: var(--accent-cyan);
+        transform: translateX(5px);
+    }
+
+    .tech-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .tech-badge {
+        padding: 0.35rem 0.75rem;
+        background: rgba(0, 224, 255, 0.1);
+        border: 1px solid rgba(0, 224, 255, 0.2);
+        border-radius: 1rem;
+        font-size: 0.8rem;
+        color: var(--accent-cyan);
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .tech-badge:hover {
+        background: rgba(0, 224, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .footer-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem;
+        background: rgba(0, 224, 255, 0.05);
+        border-radius: 10px;
+        border: 1px solid rgba(0, 224, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+        background: rgba(0, 224, 255, 0.1);
+        transform: translateX(5px);
+    }
+
+    .stat-item i {
+        font-size: 1.5rem;
+        color: var(--accent-cyan);
+        width: 30px;
+        text-align: center;
+    }
+
+    .stat-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stat-number {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.2;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+    }
+
+    .footer-divider {
+        height: 1px;
+        background: linear-gradient(90deg, 
+            transparent, 
+            rgba(0, 224, 255, 0.3) 50%, 
+            transparent);
+        margin: 2rem 0 1.5rem;
+    }
+
+    .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .footer-copyright {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .footer-copyright strong {
+        color: var(--accent-cyan);
+    }
+
+    .separator {
+        color: var(--text-tertiary);
+        opacity: 0.5;
+    }
+
+    .heart-icon {
+        color: #ff006e;
+        animation: heartBeat 1.5s ease-in-out infinite;
+    }
+
+    @keyframes heartBeat {
+        0%, 100% { transform: scale(1); }
+        10%, 30% { transform: scale(1.1); }
+        20%, 40% { transform: scale(1); }
+    }
+
+    .coffee-icon {
+        color: #8B4513;
+    }
+
+    .footer-meta {
+        color: var(--text-tertiary);
+        font-size: 0.85rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .modern-footer {
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-bottom {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .footer-copyright {
+            justify-content: center;
+        }
+
+        .tech-badges {
+            justify-content: flex-start;
+        }
+    }
+
+    /* Modo claro adicional */
+    [data-bs-theme="light"] .social-icon-footer {
+        background: rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    [data-bs-theme="light"] .tech-badge,
+    [data-bs-theme="light"] .stat-item {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    [data-bs-theme="light"] .footer-glow {
+        background: radial-gradient(ellipse at center, 
+            rgba(124, 58, 237, 0.05) 0%, 
+            transparent 70%);
+    }
+    </style>
     
     <script>
     function animateCounter(el, start, end, duration) {
@@ -360,118 +745,29 @@
 
 
 
-        <!-- SwiperJS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        const swiper = new Swiper('.portfolio-slider', {
-            slidesPerView: 1,
-            spaceBetween: 20,
-            loop: true,
-            autoplay: {
-            delay: 9000, // 9 segundos
-            disableOnInteraction: false,
-            },
-            pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-            },
-            breakpoints: {
-            768: { slidesPerView: 2 },
-            992: { slidesPerView: 3 }
-            }
-        });
 
-    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
     <script>
-        // ===== Utilidades =====
-        const $ = (sel, el=document) => el.querySelector(sel);
-        const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
-
-        // Año footer
-        $('#year').textContent = new Date().getFullYear();
-
-
-
-        // Reveal on scroll
-        const revObs = new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); revObs.unobserve(e.target);} });
-        }, {threshold:.2});
-        $$('.reveal').forEach(el=>revObs.observe(el));
-
-        // Parallax efecto suave (mejor que background-attachment en mobile)
-        const parallaxBg = document.getElementById('parallaxBg');
-        const onScroll = ()=>{
-        const y = window.scrollY || window.pageYOffset;
-        // Mover fondo más lento que el scroll
-        parallaxBg.style.transform = `translateY(${y * 0.35}px)`;
-        };
-        document.addEventListener('scroll', onScroll, {passive:true});
-
-        // Filtros de portafolio
-        const grid = $('#portfolioGrid');
-        $$('.portfolio-filters .btn').forEach(btn=>{
-        btn.addEventListener('click', () => {
-            $$('.portfolio-filters .btn').forEach(b=>b.classList.remove('active'));
-            btn.classList.add('active');
-            const f = btn.dataset.filter;
-            $$('.portfolio-item', grid).forEach(card =>{
-            const cats = (card.dataset.cat || '').split(' ');
-            const show = f === '*' || cats.includes(f);
-            card.style.display = show ? '' : 'none';
-            });
-        });
-        });
-
-        // Theme toggle (dark / light con Bootstrap 5.3)
-        const root = document.documentElement;
-        const toggleBtn = document.getElementById('themeToggle');
-        const savedTheme = localStorage.getItem('tk-theme');
-        if(savedTheme){ document.documentElement.setAttribute('data-bs-theme', savedTheme); }
-        toggleBtn.addEventListener('click', ()=>{
-        const current = root.getAttribute('data-bs-theme') || 'dark';
-        const next = current === 'dark' ? 'light' : 'dark';
-        root.setAttribute('data-bs-theme', next);
-        localStorage.setItem('tk-theme', next);
-        });
-
+        // Año footer (respaldo si main.js no carga)
+        const yearEl = document.getElementById('year');
+        if (yearEl) yearEl.textContent = new Date().getFullYear();
     </script>
     
     <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
-    <script>
-            VanillaTilt.init(document.querySelectorAll(".tilt-card"), {
-        max: 15,           // ángulo máximo de inclinación
-        speed: 400,        // velocidad de animación
-        glare: true,       // efecto de brillo
-        "max-glare": 0.3,  // intensidad del brillo
-        scale: 1.05        // agrandar un poquito al hacer hover
-        });
-
-
-    </script>
-
+    
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-
-    // Activar el link clickeado
     navLinks.forEach(link => {
         link.addEventListener('click', function() {
-            // Remover 'active' de todos los links
             navLinks.forEach(l => l.classList.remove('active'));
-
-            // Agregar 'active' al link clickeado
             this.classList.add('active');
         });
     });
-
-
 });
 </script>
-
-
-
 
     </body>
     </html>

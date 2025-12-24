@@ -3,12 +3,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Blog
 from .forms import ComentarioForm
 from django.contrib import messages
+from apps.configuraciones.models import Categoria
 
 # Create your views here.
 def blog_view(request):
     blogs = Blog.objects.filter(vigencia=True)
+    categorias = Categoria.objects.all()
 
-    return render(request, 'blog/blog.html',{'blogs': blogs})
+    return render(request, 'blog/blog.html',{'blogs': blogs, 'categorias': categorias})
 
 
 def blog_detail(request, pk):

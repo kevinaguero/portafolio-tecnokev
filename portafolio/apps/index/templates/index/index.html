@@ -1,13 +1,53 @@
 {% extends "base/base_portafolio.html" %}
 {% load static %}
-{% block titulo %}Tecno Kev — Portfolio & Blog{% endblock %}
+{% block titulo %}Tecno Kev — portafolio & Blog{% endblock %}
 {% block contenido %}
 
     <!-- HOME -->
     <div class="container-fluid p-0 mb-5 wow fadeIn" id="home" data-wow-delay="0.1s">
         <div id="header-carousel" class="carousel slide" data-bs-ride="carousel" >
             <div class="carousel-inner">
-                <div class="carousel-item active">
+                
+                <!-- Carousels dinámicos desde la base de datos -->
+                {% for carousel in carousels %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                  <div class="hero position-relative">
+                    <!-- Imagen de fondo -->
+                    <div class="hero__bg hero__bg--custom" style="background-image: url('{{ carousel.imagen.url }}');"></div>
+                    
+                    <!-- Overlay con degradados de colores -->
+                    <div class="hero__overlay" aria-hidden="true"></div>
+                    <div class="glow" aria-hidden="true"></div>
+
+                    <div class="hero__content container">
+                        <!-- Categorías arriba -->
+                        {% if carousel.categorias.all %}
+                        <span class="badge rounded-pill badge-tech px-3 py-2">
+                            {% for categoria in carousel.categorias.all %}{{ categoria.nombre }}{% if not forloop.last %} • {% endif %}{% endfor %}
+                        </span>
+                        {% endif %}
+                        
+                        <!-- Título -->
+                        <h1 class="mt-3">{{ carousel.titulo }}</h1>
+                        
+                        <!-- Descripción -->
+                        <p class="lead">{{ carousel.descripcion }}</p>
+                        
+                        <!-- Botón opcional -->
+                        {% if carousel.nombre_boton and carousel.link_boton %}
+                        <div class="d-flex gap-3 justify-content-center mt-4">
+                            <a href="{{ carousel.link_boton }}" class="btn btn-primary btn-lg" target="_blank" rel="noreferrer">
+                                {{ carousel.nombre_boton }}
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+
+                <!-- Hero principal de Kevin (siempre al final) -->
+                <div class="carousel-item {% if not carousels %}active{% endif %}">
                   <div id="" class="hero position-relative">
                     <div class="hero__bg" id="parallaxBg" aria-hidden="true"></div>
                     <div class="hero__overlay" aria-hidden="true"></div>
@@ -15,55 +55,15 @@
 
                     <div class="hero__content container">
                         <span class="badge rounded-pill badge-tech px-3 py-2">Automatización • IA • Web • Datos</span>
-                        <h1 class="mt-3">Hola, soy <span style="color:var(--tk-primary)">Kevin Agüero</span> — <span style="color:var(--tk-accent)">Tecno Kev</span></h1>
+                        <h1 class="mt-3">Hola, soy <span style="color:var(--accent-cyan)">Kevin Agüero</span> — <span style="color:var(--accent-violet)">Tecno Kev</span></h1>
                         <p class="lead">Desarrollo soluciones end-to-end: desde backend y pipelines de datos, hasta interfaces modernas. Aquí comparto mi portafolio, artículos y notas técnicas.</p>
-                        <div class="d-flex gap-3 justify-content-center mt-4">
+                        <div class="d-flex gap-3 justify-content-center mt-4 reveal">
                             <a href="#proyectos" class="btn btn-primary btn-lg">Ver proyectos</a>
                             <a href="#contact" class="btn btn-outline-light btn-lg">Hablemos</a>
                         </div>
                         <img src="{% static 'img/silueta.png' %}" alt="silueta kev" class="hero-silueta" />
                     </div>
                 </div>
-                    
-                </div>
-                <div class="carousel-item">
-                  <img class="w-100 carousel-image" src="{% static 'img/2.jpg' %}" alt="Envios a todo el pais carousel">
-                  <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark" style="opacity: 0.3;"></div>
-                    <div class="carousel-caption">
-                        <div class="container">
-                            <div class="row justify-content-start">
-                                <div class="col-lg-7">
-                                    <h1 class="display-2 mb-5 animated slideInDown text-white" style="text-shadow: 6px 6px 4px rgba(0, 0, 0, 0.7);">Realizamos envíos a todo el país</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                  <img class="w-100 carousel-image" src="{% static 'img/3.jpg' %}" alt="Recetas saludables carousel">
-                  <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark" style="opacity: 0.3;"></div>
-                    <div class="carousel-caption">
-                        <div class="container">
-                            <div class="row justify-content-start">
-                                <div class="col-lg-7">
-                                    <h1 class="display-2 mb-5 animated slideInDown text-white" style="text-shadow: 6px 6px 4px rgba(0, 0, 0, 0.7);">¡Recetas saludables riquísimas!</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img class="w-100 carousel-image" src="{% static 'img/4.jpg' %}" alt="Otros productos carousel">
-                    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark" style="opacity: 0.3;"></div>
-                    <div class="carousel-caption">
-                        <div class="container">
-                            <div class="row justify-content-start">
-                                <div class="col-lg-7">
-                                    <h1 class="display-2 mb-5 animated slideInDown text-white" style="text-shadow: 6px 6px 4px rgba(0, 0, 0, 0.7);">Otros productos</h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
             </div>
@@ -85,7 +85,7 @@
     <section id="about" class="position-relative">
         <div class="container">
         <div class="row g-4 align-items-center">
-            <div class="col-lg-5">
+            <div class="col-lg-5 reveal-left">
             <div class="tk-card p-4 tilt-card">
                 <img class="about-avatar mb-3" src="{%static 'img/avatar.jpg'%}" alt="Avatar" />
                 <h2 class="section-title mb-3">Acerca de mí</h2>
@@ -101,7 +101,7 @@
                 </div>
             </div>
             </div>
-            <div class="col-lg-7">
+            <div class="col-lg-7 reveal-right">
             <div class="row g-4">
                 <div class="col-sm-6">
                 <div class="tk-card h-100 p-4 reveal tilt-card">
@@ -139,21 +139,21 @@
     </section>
 
     {% if proyectos %}
-    <section id="proyectos">
+    <section id="proyectos" class="reveal">
         <div class="container">
             <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
-                <div>
+                <div class="reveal-left">
                     <h2 class="section-title">Proyectos</h2>
                     <p class="section-lead">Algunos trabajos recientes. Filtrá por categoría.</p>
                     <a href="{% url 'proyectos:proyectos_view' %}" class="btn btn-outline-light mt-2">Ver todos</a>
                 </div>
 
                 {% if proyectos|length > 3 %}
-                <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
+                <div class="portafolio-filters btn-group" id="filtros-proyectos" role="group" aria-label="Filtros de portafolio">
                     <button class="btn btn-outline-light active" data-filter="*">Todos</button>
-                    {% for categoria in categorias %}
-                        <button class="btn btn-outline-light" data-filter="{{ categoria.slug }}">
-                            {{ categoria.nombre }}
+                    {% for cat in categorias_proyectos %}
+                        <button class="btn btn-outline-light" data-filter="{{ cat.id }}">
+                            {{ cat.nombre }}
                         </button>
                     {% endfor %}
                 </div>
@@ -161,10 +161,10 @@
             </div>
 
             <!-- Slider -->
-            <div id="portfolioGrid" class="swiper portfolio-slider">
+            <div id="proyectos-slider" class="swiper">
                 <div class="swiper-wrapper">
                     {% for proyecto in proyectos %}
-                    <div class="swiper-slide portfolio-item" data-cat="{{ proyecto.categorias.all|join:' ' }}">
+                    <div class="swiper-slide portafolio-item" data-cat="{% for c in proyecto.categorias.all %}{{ c.id }} {% endfor %}">
                         <div class="tk-card h-100 d-flex flex-column">
                             <img src="{{ proyecto.imagen.url }}" alt="{{ proyecto.titulo }}" />
                             <div class="p-4 d-flex flex-column flex-grow-1">
@@ -175,15 +175,19 @@
                                 <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
                                     {{ proyecto.descripcion|truncatewords:30 }}
                                 </div>
-                                {% if proyecto.titulo_boton %}
-                                    <a href="#" class="btn btn-sm btn-outline-light mt-auto">{{ proyecto.titulo_boton }}</a>
-                                {% endif %}
-                                
-                                {% if proyecto.link_github %}
-                                    <a href="{{ proyecto.link_github }}" class="btn btn-sm btn-outline-light mt-auto" target="_blank">
-                                        Ver código
-                                    </a>
-                                {% endif %}
+                                <!-- Contenedor de botones -->
+                                <div class="d-flex gap-2 mt-auto">
+                                    {% if proyecto.titulo_boton %}
+                                        <a href="{{ proyecto.link_boton }}" class="btn btn-sm btn-outline-light">
+                                            {{ proyecto.titulo_boton }}
+                                        </a>
+                                    {% endif %}
+                                    {% if proyecto.link_github %}
+                                        <a href="{{ proyecto.link_github }}" class="btn btn-sm btn-outline-light" target="_blank">
+                                            Ver código
+                                        </a>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -199,43 +203,48 @@
     
     <!-- BLOG -->
     {% if blogs %}
-    <section id="blog">
+    <section id="blog" class="reveal">
         <div class="container">
             <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
-                <div>
+                <div class="reveal-left">
                     <h2 class="section-title">Blog</h2>
                     <p class="section-lead">Notas técnicas, tutoriales y experimentos.</p>
                     <a href="{%url 'blog:blog_view' %}" class="btn btn-outline-light mt-2">Ver todos</a>
                 </div>
-                <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
+                {% if blogs|length > 3 %}
+                <div id="filtros-blogs" class="portafolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
                     <button class="btn btn-outline-light active" data-filter="*">Todos</button>
-                    <button class="btn btn-outline-light" data-filter="web">Web</button>
-                    <button class="btn btn-outline-light" data-filter="data">Datos</button>
-                    <button class="btn btn-outline-light" data-filter="ai">IA</button>
-                    <button class="btn btn-outline-light" data-filter="automation">Automatización</button>
+                    {% for cat in categorias_blogs %}
+                    <button class="btn btn-outline-light" data-filter="{{ cat.id }}">
+                            {{ cat.nombre }}
+                        </button>
+                    {% endfor %}
                 </div>
+                {% endif %}
             </div>
 
             <!-- Slider -->
-            <div class="swiper portfolio-slider">
+            <div id="blog-slider" class="swiper">
                 <div class="swiper-wrapper">
-
+                    {% for blog in blogs %}
                     <!-- Item 1 -->
-                    <div class="swiper-slide portfolio-item">
+                    <div class="swiper-slide portafolio-item" data-cat="{% for c in blog.categorias.all %}{{ c.id }} {% endfor %}">
                         <div class="tk-card h-100 d-flex flex-column">
-                            <img src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1600&auto=format&fit=crop" alt="Post 1" />
+                            <img src="{{blog.imagen.url}}" alt="{{blog.titulo}}" />
                             <div class="p-4 d-flex flex-column flex-grow-1">
-                                <h5 class="fw-bold mb-1">Chatbot RAG para pedidos</h5>
-                                <p class="text-secondary small mb-3">LangChain • PDF pricing • Streamlit</p>
+                                <h5 class="fw-bold mb-1">{{blog.titulo}}</h5>
+                                <p class="text-secondary small mb-3">
+                                    {{ blog.categorias.all|join:' • ' }}
+                                </p>
                                 <!-- Contenedor para descripción con scroll -->
                                 <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
-                                    Asistente que consulta menús y precios desde PDF con recuperación semántica. Incluye validación y logs. Aaagia como estas
-
+                                    {{ blog.descripcion|truncatechars:200 }}
                                 </div>
-                                <a href="#" class="btn btn-sm btn-outline-light mt-auto" data-bs-toggle="modal" data-bs-target="#proj1">Leer</a>
+                                <a href="#" class="btn btn-sm btn-outline-light mt-auto">Leer</a>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
 
                 </div>
                 <!-- Controles -->
@@ -247,29 +256,32 @@
 
     <!-- CURSOS -->
      {% if cursos %}
-    <section id="cursos">
+    <section id="cursos" class="reveal">
         <div class="container">
             <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
-                <div>
+                <div class="reveal-left">
                     <h2 class="section-title">Cursos</h2>
                     <p class="section-lead">Formación y talleres que ofrezco.</p>
                     <a href="/" class="btn btn-outline-light mt-2">Ver todos</a>
                 </div>
-                <div class="portfolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
+                {% if blogs|length > 3 %}
+                <div class="portafolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
                     <button class="btn btn-outline-light active" data-filter="*">Todos</button>
-                    <button class="btn btn-outline-light" data-filter="web">Web</button>
-                    <button class="btn btn-outline-light" data-filter="data">Datos</button>
-                    <button class="btn btn-outline-light" data-filter="ai">IA</button>
-                    <button class="btn btn-outline-light" data-filter="automation">Automatización</button>
+                    {% for categoria in categorias %}
+                    <button class="btn btn-outline-light" data-filter="{{ categoria.slug }}">
+                            {{ categoria.nombre }}
+                        </button>
+                    {% endfor %}
                 </div>
+                {% endif %}
             </div>
 
             <!-- Slider -->
-            <div class="swiper portfolio-slider">
+            <div class="swiper" id="cursos-slider">
             <div class="swiper-wrapper">
 
                 <!-- Curso 1 -->
-                <div class="swiper-slide portfolio-item">
+                <div class="swiper-slide portafolio-item">
                 <div class="tk-card h-100 d-flex flex-column">
                     <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1600&auto=format&fit=crop" alt="Curso LangChain" />
                     <div class="p-4 d-flex flex-column flex-grow-1">
@@ -282,52 +294,6 @@
                     </div>
                 </div>
                 </div>
-
-                <!-- Curso 2 -->
-                <div class="swiper-slide portfolio-item">
-                    <div class="tk-card h-100 d-flex flex-column">
-                        <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437e0?q=80&w=1600&auto=format&fit=crop" alt="Curso n8n" />
-                        <div class="p-4 d-flex flex-column flex-grow-1">
-                        <h5 class="fw-bold mb-1">Automatización con n8n</h5>
-                        <p class="text-secondary small mb-3">ETL • Scraping • Integraciones</p>
-                        <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
-                            Flujo de datos con scraping responsable, PostgreSQL y alertas en tiempo real.
-                        </div>
-                        <a href="#" class="btn btn-sm btn-outline-light mt-auto">Ver curso</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Curso 2 -->
-                <div class="swiper-slide portfolio-item">
-                    <div class="tk-card h-100 d-flex flex-column">
-                        <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437e0?q=80&w=1600&auto=format&fit=crop" alt="Curso n8n" />
-                        <div class="p-4 d-flex flex-column flex-grow-1">
-                        <h5 class="fw-bold mb-1">Automatización con n8n</h5>
-                        <p class="text-secondary small mb-3">ETL • Scraping • Integraciones</p>
-                        <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
-                            Flujo de datos con scraping responsable, PostgreSQL y alertas en tiempo real.
-                        </div>
-                        <a href="#" class="btn btn-sm btn-outline-light mt-auto">Ver curso</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Curso 2 -->
-                <div class="swiper-slide portfolio-item">
-                    <div class="tk-card h-100 d-flex flex-column">
-                        <img src="https://images.unsplash.com/photo-1605902711622-cfb43c4437e0?q=80&w=1600&auto=format&fit=crop" alt="Curso n8n" />
-                        <div class="p-4 d-flex flex-column flex-grow-1">
-                        <h5 class="fw-bold mb-1">Automatización con n8n</h5>
-                        <p class="text-secondary small mb-3">ETL • Scraping • Integraciones</p>
-                        <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
-                            Flujo de datos con scraping responsable, PostgreSQL y alertas en tiempo real.
-                        </div>
-                        <a href="#" class="btn btn-sm btn-outline-light mt-auto">Ver curso</a>
-                        </div>
-                    </div>
-                </div>
-
             </div>
             <!-- Paginación -->
             <div class="swiper-pagination"></div>
@@ -337,26 +303,285 @@
     {% endif %}
 
     <!-- CONTACTO -->
-    <section id="contact">
+    <section id="contact" class="reveal">
         <div class="container">
-        <div class="row g-4 align-items-start">
-            <div class="col-lg-6">
-                <h2 class="section-title">Contacto</h2>
-                <p class="section-lead">¿Proyecto, consultoría o colaboración? Escribime y coordinamos.</p>
-                <div class="tk-card p-4 h-100">
-                    <h5 class="fw-bold mb-3">Redes y enlaces</h5>
-                    <ul class="list-unstyled mb-4">
-                    <li class="mb-2">📧 <a href="mailto:contacto@tecnokev.dev">contacto@tecnokev.dev</a></li>
-                    <li class="mb-2">🐙 <a href="#" target="_blank" rel="noreferrer">GitHub</a></li>
-                    <li class="mb-2">💼 <a href="#" target="_blank" rel="noreferrer">LinkedIn</a></li>
-                    <li class="mb-2">🧵 <a href="#" target="_blank" rel="noreferrer">X / Threads</a></li>
-                    </ul>
-                    <h5 class="fw-bold mb-3">Disponibilidad</h5>
-                    <p class="mb-0">Catamarca (UTC-3). Respondo en 24-48h hábiles. Idiomas: ES / EN.</p>
+        <div class="row g-4 align-items-start justify-content-center">
+            <div class="col-lg-8 reveal-left">
+                <div class="text-center mb-4">
+                    <h2 class="section-title">¿Hablamos?</h2>
+                    <p class="section-lead">¿Proyecto, consultoría o colaboración? Escribime y coordinamos.</p>
+                </div>
+                
+                <div class="tk-card p-5 contact-card">
+                    <!-- Email destacado -->
+                    <div class="text-center mb-5">
+                        <div class="email-icon-wrapper mb-3">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <a href="mailto:contacto@tecnokev.dev" class="email-link">contacto@tecnokev.dev</a>
+                    </div>
+
+                    <!-- Redes sociales modernas -->
+                    <h5 class="fw-bold text-center mb-4">Conectemos</h5>
+                    <div class="social-links-grid">
+                        <a href="#" target="_blank" rel="noreferrer" class="social-link-card github-card">
+                            <div class="social-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <div class="social-info">
+                                <span class="social-name">GitHub</span>
+                                <span class="social-handle">@tecnokev</span>
+                            </div>
+                        </a>
+                        
+                        <a href="#" target="_blank" rel="noreferrer" class="social-link-card linkedin-card">
+                            <div class="social-icon">
+                                <i class="fab fa-linkedin-in"></i>
+                            </div>
+                            <div class="social-info">
+                                <span class="social-name">LinkedIn</span>
+                                <span class="social-handle">Kevin Agüero</span>
+                            </div>
+                        </a>
+                        
+                        <a href="#" target="_blank" rel="noreferrer" class="social-link-card twitter-card">
+                            <div class="social-icon">
+                                <i class="fab fa-twitter"></i>
+                            </div>
+                            <div class="social-info">
+                                <span class="social-name">Twitter / X</span>
+                                <span class="social-handle">@tecnokev</span>
+                            </div>
+                        </a>
+                        
+                        <a href="#" target="_blank" rel="noreferrer" class="social-link-card telegram-card">
+                            <div class="social-icon">
+                                <i class="fab fa-telegram-plane"></i>
+                            </div>
+                            <div class="social-info">
+                                <span class="social-name">Telegram</span>
+                                <span class="social-handle">@tecnokev</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <hr class="my-4" style="opacity: 0.1;">
+
+                    <!-- Disponibilidad -->
+                    <div class="availability-info text-center">
+                        <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+                            <div class="info-badge">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                <span>Catamarca, Argentina (UTC-3)</span>
+                            </div>
+                            <div class="info-badge">
+                                <i class="fas fa-clock me-2"></i>
+                                <span>Respondo en 24-48h</span>
+                            </div>
+                            <div class="info-badge">
+                                <i class="fas fa-language me-2"></i>
+                                <span>ES / EN</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         </div>
     </section>
 
+    <!-- Estilos para la sección de contacto -->
+    <style>
+    .contact-card {
+        backdrop-filter: blur(20px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .email-icon-wrapper {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+        border-radius: 20px;
+        animation: float 3s ease-in-out infinite;
+        box-shadow: 0 10px 30px rgba(0, 224, 255, 0.3);
+    }
+
+    .email-icon-wrapper i {
+        font-size: 2rem;
+        color: white;
+    }
+
+    .email-link {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent-cyan);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .email-link:hover {
+        color: var(--accent-violet);
+        transform: translateY(-2px);
+        text-shadow: 0 5px 15px rgba(0, 224, 255, 0.4);
+    }
+
+    .social-links-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .social-link-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.25rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 1rem;
+        text-decoration: none;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .social-link-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.05));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .social-link-card:hover::before {
+        opacity: 1;
+    }
+
+    .social-link-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent-cyan);
+        box-shadow: 0 10px 30px rgba(0, 224, 255, 0.2);
+    }
+
+    .github-card:hover {
+        border-color: #6e5494;
+        box-shadow: 0 10px 30px rgba(110, 84, 148, 0.3);
+    }
+
+    .linkedin-card:hover {
+        border-color: #0077b5;
+        box-shadow: 0 10px 30px rgba(0, 119, 181, 0.3);
+    }
+
+    .twitter-card:hover {
+        border-color: #1da1f2;
+        box-shadow: 0 10px 30px rgba(29, 161, 242, 0.3);
+    }
+
+    .telegram-card:hover {
+        border-color: #0088cc;
+        box-shadow: 0 10px 30px rgba(0, 136, 204, 0.3);
+    }
+
+    .social-icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(0, 224, 255, 0.1), rgba(124, 58, 237, 0.1));
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .social-link-card:hover .social-icon {
+        transform: scale(1.1) rotate(5deg);
+        background: linear-gradient(135deg, rgba(0, 224, 255, 0.2), rgba(124, 58, 237, 0.2));
+    }
+
+    .social-icon i {
+        font-size: 1.5rem;
+        color: var(--accent-cyan);
+        transition: color 0.3s ease;
+    }
+
+    .github-card:hover .social-icon i { color: #6e5494; }
+    .linkedin-card:hover .social-icon i { color: #0077b5; }
+    .twitter-card:hover .social-icon i { color: #1da1f2; }
+    .telegram-card:hover .social-icon i { color: #0088cc; }
+
+    .social-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .social-name {
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 1rem;
+    }
+
+    .social-handle {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+
+    .info-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 2rem;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        white-space: nowrap;
+    }
+
+    .info-badge i {
+        color: var(--accent-cyan);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .social-links-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .email-link {
+            font-size: 1.2rem;
+        }
+        
+        .availability-info .d-flex {
+            flex-direction: column;
+            gap: 0.75rem !important;
+        }
+    }
+
+    /* Modo claro */
+    [data-bs-theme="light"] .social-link-card {
+        background: rgba(255, 255, 255, 0.8);
+        border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    [data-bs-theme="light"] .info-badge {
+        background: rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 0, 0, 0.1);
+    }
+    </style>
+
+        <!-- SwiperJS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="{% static 'js/swiper.js' %}"></script>
 {%endblock%}

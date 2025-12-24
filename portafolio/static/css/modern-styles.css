@@ -1,0 +1,924 @@
+/* ========================================
+   PORTAFOLIO TECNOKEV - ESTILOS MODERNOS
+   ======================================== */
+
+/* Variables para tema claro y oscuro */
+:root {
+    /* Tema Oscuro (default) */
+    --bg-primary: #0b0f14;
+    --bg-secondary: #121821;
+    --bg-surface: rgba(18, 24, 33, 0.85);
+    --text-primary: #e6f1ff;
+    --text-secondary: #a5b4c7;
+    --text-muted: #7a8a9e;
+    --accent-cyan: #00e0ff;
+    --accent-violet: #7c3aed;
+    --accent-gradient: linear-gradient(135deg, rgba(0,224,255,0.3), rgba(124,58,237,0.3));
+    --border-color: rgba(255, 255, 255, 0.08);
+    --hover-border: rgba(0, 224, 255, 0.5);
+    --shadow-glow: 0 10px 40px rgba(0, 224, 255, 0.15);
+    --card-bg: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    
+    /* Efectos */
+    --blur-effect: blur(10px);
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Tema Claro */
+[data-bs-theme="light"] {
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #ffffff;
+    --bg-surface: rgba(255, 255, 255, 0.95);
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --accent-cyan: #0891b2;
+    --accent-violet: #7c3aed;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --hover-border: rgba(8, 145, 178, 0.5);
+    --shadow-glow: 0 10px 40px rgba(8, 145, 178, 0.1);
+    --card-bg: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01));
+}
+
+/* Fondo para modo claro */
+[data-bs-theme="light"] body {
+    background: linear-gradient(135deg, #e0f2fe 0%, #ddd6fe 50%, #fce7f3 100%) !important;
+    background-attachment: fixed !important;
+    color: var(--text-primary) !important;
+}
+
+/* Hero background en modo claro */
+[data-bs-theme="light"] .hero__bg {
+    background: linear-gradient(135deg, #e0f2fe 0%, #ddd6fe 50%, #fce7f3 100%) !important;
+}
+
+/* Glow effect más sutil en modo claro */
+[data-bs-theme="light"] .glow {
+    opacity: 0.2;
+}
+
+/* ========================================
+   ANIMACIONES GLOBALES
+   ======================================== */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes colorPulse {
+    0%, 100% {
+        color: var(--accent-cyan);
+        text-shadow: 0 0 10px rgba(0, 224, 255, 0.5);
+    }
+    50% {
+        color: var(--accent-violet);
+        text-shadow: 0 0 10px rgba(124, 58, 237, 0.5);
+    }
+}
+
+/* ========================================
+   PARTÍCULAS DE FONDO ANIMADAS
+   ======================================== */
+
+.particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--accent-cyan);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float 6s ease-in-out infinite;
+}
+
+.particle:nth-child(2n) {
+    background: var(--accent-violet);
+    animation-duration: 8s;
+}
+
+.particle:nth-child(3n) {
+    animation-duration: 10s;
+}
+
+/* ========================================
+   NAVBAR MEJORADO
+   ======================================== */
+
+.navbar {
+    background: var(--bg-surface);
+    backdrop-filter: var(--blur-effect);
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition-smooth);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.navbar.scrolled {
+    padding: 0.5rem 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.5rem;
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.navbar-brand strong {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-link {
+    position: relative;
+    font-weight: 500;
+    transition: var(--transition-smooth);
+    padding: 0.5rem 1rem !important;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-violet));
+    transition: var(--transition-smooth);
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::before,
+.nav-link.active::before {
+    width: 80%;
+}
+
+.nav-link:hover {
+    color: var(--accent-cyan) !important;
+    transform: translateY(-2px);
+}
+
+/* ========================================
+   THEME TOGGLE BUTTON MEJORADO
+   ======================================== */
+
+#themeToggle {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+}
+
+#themeToggle:hover {
+    border-color: var(--accent-violet);
+    background: rgba(124, 58, 237, 0.1);
+}
+
+#themeToggle .icon {
+    font-size: 1rem;
+    transition: opacity 0.3s ease;
+    position: absolute;
+}
+
+#themeToggle .sun-icon {
+    opacity: 0;
+}
+
+#themeToggle .moon-icon {
+    opacity: 1;
+}
+
+[data-bs-theme="light"] #themeToggle .sun-icon {
+    opacity: 1;
+}
+
+[data-bs-theme="light"] #themeToggle .moon-icon {
+    opacity: 0;
+}
+
+/* ========================================
+   HERO SECTION MEJORADO
+   ======================================== */
+
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.hero__bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #0b0f14 0%, #121821 50%, #1a1030 100%);
+    z-index: 0;
+}
+
+[data-bs-theme="light"] .hero__bg {
+    background: linear-gradient(135deg, #e0f2fe 0%, #ddd6fe 50%, #fce7f3 100%);
+}
+
+.hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(ellipse at 30% 20%, rgba(124, 58, 237, 0.3), transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(0, 224, 255, 0.3), transparent 50%);
+    z-index: 1;
+}
+
+.hero__content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 2rem;
+    animation: fadeInUp 1s ease-out;
+}
+
+.hero h1 {
+    font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.hero h1 span {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: pulse 3s ease-in-out infinite;
+}
+
+.hero .lead {
+    font-size: 1.25rem;
+    max-width: 700px;
+    margin: 0 auto 2rem;
+    color: var(--text-secondary);
+    animation: fadeInUp 1s ease-out 0.4s both;
+}
+
+.badge-tech {
+    background: rgba(0, 224, 255, 0.15);
+    color: var(--accent-cyan);
+    border: 1px solid rgba(0, 224, 255, 0.35);
+    padding: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    backdrop-filter: var(--blur-effect);
+    animation: fadeInDown 1s ease-out both;
+}
+
+.glow {
+    position: absolute;
+    inset: -20%;
+    background: var(--accent-gradient);
+    filter: blur(80px);
+    opacity: 0.4;
+    z-index: 0;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+.hero-silueta {
+    animation: float 6s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(0, 224, 255, 0.3));
+}
+
+/* ========================================
+   CARDS MODERNOS CON EFECTOS
+   ======================================== */
+
+.tk-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 1.25rem;
+    overflow: hidden;
+    transition: var(--transition-smooth);
+    position: relative;
+    backdrop-filter: var(--blur-effect);
+}
+
+.tk-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(0, 224, 255, 0.05) 0%, 
+        transparent 50%, 
+        rgba(124, 58, 237, 0.05) 100%);
+    opacity: 0;
+    transition: var(--transition-smooth);
+}
+
+.tk-card:hover {
+    border-color: var(--hover-border);
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-5px);
+}
+
+.tk-card:hover::before {
+    opacity: 1;
+}
+
+.tk-card img {
+    transition: var(--transition-smooth);
+}
+
+.tk-card:hover img {
+    transform: scale(1.05);
+}
+
+/* Efecto shimmer en hover */
+.tk-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transition: left 0.7s;
+}
+
+.tk-card:hover::after {
+    left: 100%;
+}
+
+/* ========================================
+   BOTONES MEJORADOS
+   ======================================== */
+
+.btn {
+    position: relative;
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    border-radius: 0.75rem;
+    transition: var(--transition-smooth);
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+    opacity: 0;
+    transition: var(--transition-smooth);
+    z-index: -1;
+}
+
+.btn:hover::before {
+    opacity: 1;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+    border: none;
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 224, 255, 0.3);
+}
+
+.btn-outline-light {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background: linear-gradient(135deg, rgba(0, 224, 255, 0.2), rgba(124, 58, 237, 0.2));
+    border-color: rgba(124, 58, 237, 0.4);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(124, 58, 237, 0.3);
+}
+
+.btn-outline-light.active {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+    border-color: var(--accent-violet);
+    color: white;
+    box-shadow: 0 5px 20px rgba(124, 58, 237, 0.4);
+}
+
+/* ========================================
+   SECCIONES CON ANIMACIONES
+   ======================================== */
+
+section {
+    position: relative;
+    padding: 5rem 0;
+    overflow: hidden;
+}
+
+.section-title {
+    font-weight: 800;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-violet));
+    border-radius: 2px;
+}
+
+.section-lead {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+/* ========================================
+   REVEAL ON SCROLL
+   ======================================== */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.reveal-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ========================================
+   BADGES Y TAGS
+   ======================================== */
+
+.badge {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: var(--transition-smooth);
+}
+
+.badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================
+   FOOTER MEJORADO
+   ======================================== */
+
+footer {
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-color);
+    padding: 2rem 0;
+    backdrop-filter: var(--blur-effect);
+}
+
+footer .counter {
+    font-size: 1.3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: colorPulse 3s ease-in-out infinite;
+}
+
+/* ========================================
+   SCROLL PROGRESS BAR
+   ======================================== */
+
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-violet));
+    z-index: 9999;
+    transition: width 0.2s ease-out;
+}
+
+/* ========================================
+   LOADING ANIMATION
+   ======================================== */
+
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: opacity 0.5s, visibility 0.5s;
+}
+
+.loading-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--border-color);
+    border-top-color: var(--accent-cyan);
+    border-radius: 50%;
+    animation: rotate 1s linear infinite;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 991.98px) {
+    .hero {
+        min-height: 80vh;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    #themeToggle {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        min-height: 38px;
+    }
+    
+    #themeToggle .icon {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero .lead {
+        font-size: 1rem;
+    }
+    
+    section {
+        padding: 3rem 0;
+    }
+}
+
+/* ========================================
+   CUSTOM SCROLLBAR
+   ======================================== */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-violet));
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--accent-violet), var(--accent-cyan));
+}
+
+/* ========================================
+   AJUSTES ADICIONALES MODO CLARO
+   ======================================== */
+
+/* Navbar en modo claro */
+[data-bs-theme="light"] .navbar {
+    background: rgba(255, 255, 255, 0.85) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+[data-bs-theme="light"] .navbar-brand {
+    color: var(--text-primary) !important;
+}
+
+[data-bs-theme="light"] .nav-link {
+    color: var(--text-secondary) !important;
+}
+
+[data-bs-theme="light"] .nav-link:hover,
+[data-bs-theme="light"] .nav-link.active {
+    color: var(--accent-cyan) !important;
+}
+
+/* Hero en modo claro */
+[data-bs-theme="light"] .hero {
+    color: var(--text-primary);
+}
+
+[data-bs-theme="light"] .hero .lead {
+    color: var(--text-secondary);
+}
+
+[data-bs-theme="light"] .badge-tech {
+    background: rgba(8, 145, 178, 0.15);
+    color: var(--accent-cyan);
+    border-color: rgba(8, 145, 178, 0.35);
+}
+
+/* Cards en modo claro */
+[data-bs-theme="light"] .tk-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+[data-bs-theme="light"] .tk-card::before {
+    background: linear-gradient(135deg, 
+        rgba(8, 145, 178, 0.08) 0%, 
+        rgba(124, 58, 237, 0.05) 50%, 
+        rgba(124, 58, 237, 0.08) 100%);
+}
+
+[data-bs-theme="light"] .tk-card:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(124, 58, 237, 0.3);
+    box-shadow: 0 15px 40px rgba(124, 58, 237, 0.25);
+    transform: translateY(-8px);
+}
+
+[data-bs-theme="light"] .tk-card::after {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(124, 58, 237, 0.15),
+        transparent
+    );
+}
+
+/* Footer en modo claro */
+[data-bs-theme="light"] footer {
+    background: rgba(255, 255, 255, 0.9);
+    border-top-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+/* Section titles en modo claro */
+[data-bs-theme="light"] .section-title {
+    color: var(--text-primary);
+}
+
+[data-bs-theme="light"] .section-lead {
+    color: var(--text-secondary);
+}
+
+/* Botones en modo claro */
+[data-bs-theme="light"] .btn-outline-light {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.03);
+}
+
+[data-bs-theme="light"] .btn-outline-light:hover {
+    background: linear-gradient(135deg, rgba(0, 136, 204, 0.15), rgba(124, 58, 237, 0.15));
+    border-color: rgba(124, 58, 237, 0.3);
+    color: var(--text-primary);
+    box-shadow: 0 5px 20px rgba(124, 58, 237, 0.2);
+}
+
+[data-bs-theme="light"] .btn-outline-light.active {
+    background: linear-gradient(135deg, #0891b2, #7c3aed);
+    border-color: #7c3aed;
+    color: white;
+    box-shadow: 0 5px 20px rgba(124, 58, 237, 0.3);
+}
+
+/* Badges en modo claro */
+[data-bs-theme="light"] .badge {
+    background: rgba(0, 0, 0, 0.05) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Partículas menos visibles en modo claro */
+[data-bs-theme="light"] .particle {
+    opacity: 0.15;
+}
+
+/* Form controls en modo claro */
+[data-bs-theme="light"] .form-control,
+[data-bs-theme="light"] .form-select {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-bs-theme="light"] .form-control:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 0 0.25rem rgba(8, 145, 178, 0.15);
+}
+
+/* ==== Desactivar partículas (rápido y reversible) ==== */
+.particles-container,
+.particle {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* ========================================
+   ESTILOS PARA CAROUSEL DINÁMICO
+   ======================================== */
+
+/* Asegurar que todos los carousels tengan la misma altura */
+.carousel-item {
+    min-height: 90vh;
+}
+
+/* Hero background con imagen dinámica para carousels */
+.hero__bg--custom {
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: scroll !important;
+    transform: translateZ(0);
+    will-change: transform;
+    filter: saturate(1.1) contrast(1.05) brightness(.9);
+}
+
+/* Asegurar que el hero tenga altura consistente */
+.carousel-item .hero {
+    min-height: 90vh;
+    height: 90vh;
+}
+
+@media (max-width: 991.98px) {
+    .carousel-item {
+        min-height: 80vh;
+    }
+    
+    .carousel-item .hero {
+        min-height: 80vh;
+        height: 80vh;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .carousel-item {
+        min-height: 70vh;
+    }
+    
+    .carousel-item .hero {
+        min-height: 70vh;
+        height: 70vh;
+    }
+}
+
+
