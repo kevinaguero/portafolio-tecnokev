@@ -1,37 +1,441 @@
 {% extends "base/base_portafolio.html" %}
 {% load static %}
-{% block titulo %}Blog{% endblock %}
+{% block titulo %}{{ blog.titulo }} - Blog{% endblock %}
 {% block contenido %}
-<article class="blog-post">
-    <h1>{{ blog.titulo }}</h1>
-    <p>Por {{ blog.autor.get_full_name }} | {{ blog.fecha }}</p>
-    <img src="{{ blog.imagen.url }}" alt="{{ blog.titulo }}" class="img-fluid mb-3">
-    <div class="blog-contenido">
-        {{ blog.contenido|safe }}  <!-- muestra HTML formateado -->
-    </div>
 
-    <hr>
-    <h3>Comentarios</h3>
-    <div class="comentarios">
-    {% if comentarios %}
-        {% for comentario in comentarios %}
-        <div class="comentario mb-2">
-            <strong>{{ comentario.autor }}</strong> ({{ comentario.fecha|date:"d M Y H:i" }}):
-            <p>{{ comentario.contenido }}</p>
+<!-- Hero del artículo -->
+<section class="blog-hero">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Categorías -->
+                <div class="blog-categories mb-3">
+                    {% for categoria in blog.categorias.all %}
+                    <span class="badge badge-tech">{{ categoria.nombre }}</span>
+                    {% endfor %}
+                </div>
+
+                <!-- Título -->
+                <h1 class="blog-title">{{ blog.titulo }}</h1>
+
+                <!-- Meta información -->
+                <div class="blog-meta">
+                    <div class="author-info">
+                        <div class="author-avatar">
+                            {% if blog.autor.profile.avatar %}
+                            <img src="{{ blog.autor.profile.avatar.url }}" alt="{{ blog.autor.get_full_name }}">
+                            {% else %}
+                            <div class="avatar-placeholder">{{ blog.autor.get_full_name|first|upper }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="author-details">
+                            <span class="author-name">{{ blog.autor.get_full_name|default:"Kevin Agüero" }}</span>
+                            <span class="blog-date">{{ blog.fecha|date:"d M, Y" }}</span>
+                        </div>
+                    </div>
+                    <div class="blog-stats">
+                        <span><i class="fas fa-clock"></i> {% widthratio blog.contenido|wordcount 200 1 %} min de lectura</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endfor %}
-    {% else %}
-        <p>No hay comentarios todavía.</p>
-    {% endif %}
     </div>
+</section>
 
+<!-- Imagen destacada -->
+<section class="blog-featured-image">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <img src="{{ blog.imagen.url }}" alt="{{ blog.titulo }}" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</section>
 
-    <hr>
-    <h4>Deja tu comentario</h4>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Enviar</button>
-    </form>
+<!-- Contenido del artículo -->
+<article class="blog-content-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="blog-content">
+                    {{ blog.contenido|safe }}
+                </div>
+
+                <!-- Compartir en redes -->
+                <div class="blog-share">
+                    <h5>Compartir artículo</h5>
+                    <div class="share-buttons">
+                        <a href="https://twitter.com/intent/tweet?text={{ blog.titulo|urlencode }}&url={{ request.build_absolute_uri }}" target="_blank" class="share-btn twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri }}" target="_blank" class="share-btn linkedin">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="share-btn facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <hr class="blog-divider">
+
+                <!-- Información del autor -->
+                <div class="author-card">
+                    <div class="author-avatar-large">
+                        {% if blog.autor.profile.avatar %}
+                        <img src="{{ blog.autor.profile.avatar.url }}" alt="{{ blog.autor.get_full_name }}">
+                        {% else %}
+                        <div class="avatar-placeholder-large">{{ blog.autor.get_full_name|first|upper }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="author-bio">
+                        <h4>{{ blog.autor.get_full_name|default:"Kevin Agüero" }}</h4>
+                        <p class="text-secondary">Desarrollador Full Stack especializado en crear experiencias web modernas y funcionales.</p>
+                        <div class="author-social">
+                            <a href="https://github.com/kevinaguero" target="_blank"><i class="fab fa-github"></i></a>
+                            <a href="https://www.linkedin.com/in/kev-aguero/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://twitter.com/tecnokev" target="_blank"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="blog-divider">
+
+                <!-- Sección de comentarios con Giscus -->
+                <div class="blog-comments">
+                    <h3 class="comments-title">Comentarios</h3>
+                    <p class="comments-description text-secondary mb-4">
+                        Los comentarios se gestionan con GitHub Discussions. Necesitas una cuenta de GitHub para comentar.
+                    </p>
+                    
+                    <!-- Giscus widget -->
+                    <script src="https://giscus.app/client.js"
+                            data-repo="kevinaguero/portafolio-tecnokev"
+                            data-repo-id="R_kgDOPpgzJg"
+                            data-category="General"
+                            data-category-id="DIC_kwDOPpgzJs4C0NTG"
+                            data-mapping="pathname"
+                            data-strict="0"
+                            data-reactions-enabled="1"
+                            data-emit-metadata="0"
+                            data-input-position="top"
+                            data-theme="dark"
+                            data-lang="es"
+                            data-loading="lazy"
+                            crossorigin="anonymous"
+                            async>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
 </article>
+
+<style>
+/* Blog Hero */
+.blog-hero {
+    padding: 8rem 0 3rem;
+    background: linear-gradient(180deg, rgba(17, 24, 39, 1) 0%, rgba(15, 20, 25, 1) 100%);
+}
+
+.blog-categories {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.blog-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.blog-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.author-avatar, .avatar-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--accent-cyan);
+}
+
+.author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.author-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.blog-date {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.blog-stats {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.blog-stats i {
+    color: var(--accent-cyan);
+    margin-right: 0.5rem;
+}
+
+/* Featured Image */
+.blog-featured-image {
+    padding: 3rem 0;
+}
+
+.blog-featured-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Blog Content */
+.blog-content-wrapper {
+    padding: 3rem 0 5rem;
+}
+
+.blog-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-primary);
+}
+
+.blog-content h2, .blog-content h3, .blog-content h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--accent-cyan);
+}
+
+.blog-content p {
+    margin-bottom: 1.5rem;
+}
+
+.blog-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin: 2rem 0;
+}
+
+.blog-content pre {
+    background: rgba(0, 224, 255, 0.05);
+    border: 1px solid rgba(0, 224, 255, 0.2);
+    border-radius: 10px;
+    padding: 1.5rem;
+    overflow-x: auto;
+}
+
+.blog-content code {
+    background: rgba(0, 224, 255, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+}
+
+.blog-content blockquote {
+    border-left: 4px solid var(--accent-cyan);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+/* Share buttons */
+.blog-share {
+    margin: 3rem 0;
+    text-align: center;
+}
+
+.blog-share h5 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.share-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.share-btn {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.share-btn:hover {
+    transform: translateY(-5px);
+    color: white;
+}
+
+.share-btn.twitter:hover {
+    background: #1da1f2;
+    border-color: #1da1f2;
+}
+
+.share-btn.linkedin:hover {
+    background: #0077b5;
+    border-color: #0077b5;
+}
+
+.share-btn.facebook:hover {
+    background: #1877f2;
+    border-color: #1877f2;
+}
+
+.blog-divider {
+    margin: 3rem 0;
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 224, 255, 0.3) 50%, transparent);
+}
+
+/* Author Card */
+.author-card {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    background: rgba(0, 224, 255, 0.05);
+    border: 1px solid rgba(0, 224, 255, 0.2);
+    border-radius: 15px;
+}
+
+.author-avatar-large, .avatar-placeholder-large {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--accent-cyan);
+    flex-shrink: 0;
+}
+
+.author-avatar-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder-large {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.author-bio h4 {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.author-social {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.author-social a {
+    color: var(--accent-cyan);
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.author-social a:hover {
+    color: var(--accent-violet);
+}
+
+/* Comments */
+.blog-comments {
+    margin-top: 3rem;
+}
+
+.comments-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.comments-description {
+    margin-bottom: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .blog-hero {
+        padding: 6rem 0 2rem;
+    }
+
+    .blog-title {
+        font-size: 2rem;
+    }
+
+    .blog-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .author-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .author-social {
+        justify-content: center;
+    }
+}
+</style>
+
 {% endblock %}

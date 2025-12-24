@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Categoria, Novedad, Carousel
+from .models import Categoria, Carousel
 
 # Register your models here.
 
@@ -29,4 +29,3 @@ class CarouselAdmin(admin.ModelAdmin):
     )
 
 admin.site.register(Categoria)
-admin.site.register(Novedad)

@@ -40,7 +40,7 @@
             <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
               {{ blog.descripcion|truncatechars:200 }}
             </div>
-            <a href="{% url 'blog:blog_detail' blog.pk %}" class="btn btn-sm btn-outline-light mt-auto">Leer</a>
+            <a href="{% url 'blog:blog_detail' blog.slug %}" class="btn btn-sm btn-outline-light mt-auto">Leer</a>
           </div>
         </div>
       </div>

@@ -22,9 +22,9 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.index.urls')),
-    path('proyectos', include('apps.proyecto.urls', namespace='proyectos')),
-    path('blog', include('apps.blog.urls', namespace='blog')),
-    path('cursos', include('apps.curso.urls', namespace='cursos')),
+    path('proyectos/', include('apps.proyecto.urls', namespace='proyectos')),
+    path('blog/', include('apps.blog.urls', namespace='blog')),
+    path('cursos/', include('apps.curso.urls', namespace='cursos')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

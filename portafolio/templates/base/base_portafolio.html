@@ -1,4 +1,4 @@
-    {% load static %}
+{% load static %}
     <!DOCTYPE html>
     <html lang="es" data-bs-theme="dark">
     <head>
@@ -304,12 +304,6 @@
                     <li class="nav-item"><a class="nav-link {% if request.path == '/blog' %}active{% endif %}" href="{% url 'blog:blog_view' %}">Blog</a></li>
                     <!-- <li class="nav-item"><a class="nav-link" href="/#cursos">Cursos</a></li> -->
                     <li class="nav-item"><a class="nav-link" href="/#contact">Contacto</a></li>
-                    <li class="nav-item ms-lg-3">
-                        <button id="themeToggle" class="btn btn-outline-light btn-sm" type="button" aria-label="Cambiar tema">
-                            <i class="fas fa-sun icon sun-icon"></i>
-                            <i class="fas fa-moon icon moon-icon"></i>
-                        </button>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -321,97 +315,43 @@
     <!-- FOOTER -->
     <footer class="modern-footer">
         <div class="container">
-            <div class="row g-4 mb-4">
+            <div class="row g-4 align-items-start">
                 <!-- Sobre mí -->
-                <div class="col-lg-4 col-md-6">
-                    <h5 class="footer-title mb-3">
+                <div class="col-lg-5 col-md-6">
+                    <h5 class="footer-title mb-2">
                         <span class="gradient-text">Tecno Kev</span>
                     </h5>
                     <p class="footer-text mb-3">Desarrollador Full Stack especializado en crear experiencias web modernas y funcionales. De Catamarca, Argentina para el mundo.</p>
                     <div class="footer-social">
-                        <a href="#" target="_blank" rel="noreferrer" class="social-icon-footer" title="GitHub">
-                            <i class="fab fa-github"></i>
+                        <a href="https://www.youtube.com/@kev_aguero" target="_blank" rel="noreferrer" class="social-icon-footer" title="YouTube">
+                            <i class="fab fa-youtube"></i>
                         </a>
-                        <a href="#" target="_blank" rel="noreferrer" class="social-icon-footer" title="LinkedIn">
+                        <a href="https://www.tiktok.com/@kev_aguero" target="_blank" rel="noreferrer" class="social-icon-footer" title="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="https://www.instagram.com/kev_aguero0/" target="_blank" rel="noreferrer" class="social-icon-footer" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.facebook.com/kevin.aguero.31586" target="_blank" rel="noreferrer" class="social-icon-footer" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/kev-aguero/" target="_blank" rel="noreferrer" class="social-icon-footer" title="LinkedIn">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
-                        <a href="#" target="_blank" rel="noreferrer" class="social-icon-footer" title="Twitter">
-                            <i class="fab fa-twitter"></i>
+                        <a href="https://github.com/kevinaguero" target="_blank" rel="noreferrer" class="social-icon-footer" title="GitHub">
+                            <i class="fab fa-github"></i>
                         </a>
-                        <a href="mailto:contacto@tecnokev.dev" class="social-icon-footer" title="Email">
+                        <a href="mailto:kevinalbertoaguero@gmail.com" class="social-icon-footer" title="Email">
                             <i class="fas fa-envelope"></i>
                         </a>
                     </div>
-                </div>
 
-                <!-- Enlaces rápidos -->
-                <div class="col-lg-2 col-md-6 col-6">
-                    <h6 class="footer-title-small mb-3">Navegación</h6>
-                    <ul class="footer-links">
-                        <li><a href="{% if request.path == '/' %}#{% else %}/{% endif %}">Inicio</a></li>
-                        <li><a href="/#about">Acerca de mí</a></li>
-                        <li><a href="{% url 'proyectos:proyectos_view' %}">Proyectos</a></li>
-                        <li><a href="{% url 'blog:blog_view' %}">Blog</a></li>
-                        <li><a href="/#contact">Contacto</a></li>
-                    </ul>
-                </div>
+                                <!-- ...existing code... -->
 
-                <!-- Tecnologías -->
-                <div class="col-lg-3 col-md-6 col-6">
-                    <h6 class="footer-title-small mb-3">Stack Tecnológico</h6>
-                    <div class="tech-badges">
-                        <span class="tech-badge">Python</span>
-                        <span class="tech-badge">Django</span>
-                        <span class="tech-badge">JavaScript</span>
-                        <span class="tech-badge">React</span>
-                        <span class="tech-badge">PostgreSQL</span>
-                        <span class="tech-badge">Docker</span>
-                    </div>
-                </div>
-
-                <!-- Stats y contacto -->
-                <div class="col-lg-3 col-md-6">
-                    <h6 class="footer-title-small mb-3">Estadísticas</h6>
-                    <div class="footer-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-eye"></i>
-                            <div class="stat-info">
-                                <span class="stat-number" id="visitor-count">0</span>
-                                <span class="stat-label">Visitas totales</span>
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-clock"></i>
-                            <div class="stat-info">
-                                <span class="stat-number">24-48h</span>
-                                <span class="stat-label">Tiempo de respuesta</span>
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <div class="stat-info">
-                                <span class="stat-number">UTC-3</span>
-                                <span class="stat-label">Catamarca, ARG</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Línea divisoria -->
-            <div class="footer-divider"></div>
-
-            <!-- Copyright y créditos -->
-            <div class="footer-bottom">
-                <div class="footer-copyright">
-                    <span>© <span id="year"></span> <strong>Tecno Kev</strong> — Kevin Agüero</span>
-                    <span class="separator">•</span>
-                    <span>Hecho con <i class="fas fa-heart heart-icon"></i> y mucho <i class="fas fa-coffee coffee-icon"></i></span>
-                </div>
-                <div class="footer-meta">
-                    <span>Desarrollado con Django & Bootstrap</span>
-                </div>
-            </div>
+        <!-- Contador de visitas discreto en esquina inferior derecha -->
+        <div class="visitor-counter-discrete">
+            <i class="fas fa-eye"></i>
+            <span id="visitor-count">0</span>
         </div>
 
         <!-- Efecto de partículas sutil en el footer -->
@@ -421,22 +361,11 @@
     <!-- Estilos del footer moderno -->
     <style>
     .modern-footer {
-        background: linear-gradient(180deg, 
-            rgba(17, 24, 39, 0.95) 0%, 
-            rgba(31, 41, 55, 0.98) 50%, 
-            rgba(17, 24, 39, 1) 100%);
-        padding: 4rem 0 2rem;
+        background: #0f1419;
+        padding: 2.5rem 0 1.5rem;
         position: relative;
         overflow: hidden;
         border-top: 1px solid rgba(0, 224, 255, 0.1);
-    }
-
-    [data-bs-theme="light"] .modern-footer {
-        background: linear-gradient(180deg, 
-            rgba(249, 250, 251, 0.95) 0%, 
-            rgba(243, 244, 246, 0.98) 50%, 
-            rgba(249, 250, 251, 1) 100%);
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     .footer-glow {
@@ -459,9 +388,55 @@
     }
 
     .footer-title {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         font-weight: 700;
         margin-bottom: 1rem;
+    }
+
+    .visitor-counter-discrete {
+        position: absolute;
+        bottom: 1rem;
+        right: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 0.8rem;
+        background: rgba(0, 224, 255, 0.05);
+        border: 1px solid rgba(0, 224, 255, 0.1);
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        transition: all 0.3s ease;
+    }
+
+    .visitor-counter-discrete i {
+        font-size: 0.9rem;
+        color: var(--accent-cyan);
+    }
+
+    .visitor-counter-discrete span {
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .visitor-counter-discrete:hover {
+        background: rgba(0, 224, 255, 0.08);
+        border-color: rgba(0, 224, 255, 0.2);
+    }
+
+    .footer-copyright-compact {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+    }
+
+    .footer-copyright-compact strong {
+        color: var(--accent-cyan);
+    }
+
+    .footer-meta-small {
+        font-size: 0.8rem;
+        color: var(--text-tertiary);
     }
 
     .gradient-text {
@@ -569,120 +544,20 @@
         transform: translateY(-2px);
     }
 
-    .footer-stats {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .stat-item {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 0.75rem;
-        background: rgba(0, 224, 255, 0.05);
-        border-radius: 10px;
-        border: 1px solid rgba(0, 224, 255, 0.1);
-        transition: all 0.3s ease;
-    }
-
-    .stat-item:hover {
-        background: rgba(0, 224, 255, 0.1);
-        transform: translateX(5px);
-    }
-
-    .stat-item i {
-        font-size: 1.5rem;
-        color: var(--accent-cyan);
-        width: 30px;
-        text-align: center;
-    }
-
-    .stat-info {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .stat-number {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        line-height: 1.2;
-    }
-
-    .stat-label {
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-    }
-
-    .footer-divider {
-        height: 1px;
-        background: linear-gradient(90deg, 
-            transparent, 
-            rgba(0, 224, 255, 0.3) 50%, 
-            transparent);
-        margin: 2rem 0 1.5rem;
-    }
-
-    .footer-bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
-
-    .footer-copyright {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-    }
-
-    .footer-copyright strong {
-        color: var(--accent-cyan);
-    }
-
-    .separator {
-        color: var(--text-tertiary);
-        opacity: 0.5;
-    }
-
-    .heart-icon {
-        color: #ff006e;
-        animation: heartBeat 1.5s ease-in-out infinite;
-    }
-
-    @keyframes heartBeat {
-        0%, 100% { transform: scale(1); }
-        10%, 30% { transform: scale(1.1); }
-        20%, 40% { transform: scale(1); }
-    }
-
-    .coffee-icon {
-        color: #8B4513;
-    }
-
-    .footer-meta {
-        color: var(--text-tertiary);
-        font-size: 0.85rem;
-    }
-
     /* Responsive */
     @media (max-width: 768px) {
         .modern-footer {
-            padding: 3rem 0 1.5rem;
+            padding: 2rem 0 4rem;
         }
 
-        .footer-bottom {
-            flex-direction: column;
-            text-align: center;
+        .visitor-counter-discrete {
+            bottom: 0.5rem;
+            right: 50%;
+            transform: translateX(50%);
         }
 
-        .footer-copyright {
-            justify-content: center;
+        .footer-copyright-compact {
+            text-align: center !important;
         }
 
         .tech-badges {
@@ -690,25 +565,12 @@
         }
     }
 
-    /* Modo claro adicional */
-    [data-bs-theme="light"] .social-icon-footer {
-        background: rgba(0, 0, 0, 0.05);
-        border-color: rgba(0, 0, 0, 0.1);
-    }
-
-    [data-bs-theme="light"] .tech-badge,
-    [data-bs-theme="light"] .stat-item {
-        background: rgba(0, 0, 0, 0.03);
-        border-color: rgba(0, 0, 0, 0.1);
-    }
-
-    [data-bs-theme="light"] .footer-glow {
-        background: radial-gradient(ellipse at center, 
-            rgba(124, 58, 237, 0.05) 0%, 
-            transparent 70%);
+    /* Fondo sólido para el footer */
+    .modern-footer {
+        background: #101624 !important;
     }
     </style>
-    
+
     <script>
     function animateCounter(el, start, end, duration) {
         let startTime = null;
@@ -723,23 +585,49 @@
         requestAnimationFrame(step);
     }
 
-    fetch('https://visitor.6developer.com/visit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-        domain: window.location.hostname,
-        page_path: window.location.pathname
+    let visitorCounterLoaded = false;
+    function loadVisitorCounter() {
+        if (visitorCounterLoaded) return;
+        visitorCounterLoaded = true;
+        fetch('https://visitor.6developer.com/visit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                domain: window.location.hostname,
+                page_path: window.location.pathname
+            })
         })
-    })
-    .then(res => res.json())
-    .then(data => {
-        const el = document.getElementById('visitor-count');
-        if (el && data.totalCount !== undefined) {
-        // ⏩ más rápido → duración más corta
-        animateCounter(el, 0, data.totalCount, 700);
+        .then(res => res.json())
+        .then(data => {
+            const el = document.getElementById('visitor-count');
+            if (el && data.totalCount !== undefined) {
+                animateCounter(el, 0, data.totalCount, 700);
+            }
+        })
+        .catch(err => console.error('Error al registrar visita:', err));
+    }
+
+    function isFooterInView() {
+        const footer = document.querySelector('.modern-footer');
+        if (!footer) return false;
+        const rect = footer.getBoundingClientRect();
+        return (
+            rect.top < window.innerHeight &&
+            rect.bottom > 0
+        );
+    }
+
+    window.addEventListener('scroll', function() {
+        if (isFooterInView()) {
+            loadVisitorCounter();
         }
-    })
-    .catch(err => console.error('Error al registrar visita:', err));
+    });
+    // Por si el usuario ya está abajo al cargar
+    window.addEventListener('DOMContentLoaded', function() {
+        if (isFooterInView()) {
+            loadVisitorCounter();
+        }
+    });
     </script>
 
 

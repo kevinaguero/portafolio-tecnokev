@@ -7,17 +7,6 @@ class Categoria(models.Model):
 
     def __str__(self):
         return self.nombre
-    
-class Novedad(models.Model):
-    titulo = models.CharField(max_length=200)
-    tags = models.CharField(max_length=200, blank=True)  # etiquetas separadas por comas
-    descripcion = models.TextField()
-    imagen = models.ImageField(upload_to='novedades/')
-    link = models.URLField(blank=True, null=True)
-    vigencia = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.titulo
 
 class Carousel(models.Model):
     titulo = models.CharField(max_length=200, help_text="Título principal del carousel")

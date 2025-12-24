@@ -11,7 +11,6 @@ const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    initThemeToggle();
     initScrollProgress();
     initRevealOnScroll();
     // initParticles(); // partículas desactivadas
@@ -21,37 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initParallax();
     initTypingEffect();
 });
-
-// ========================================
-// THEME TOGGLE CON TRANSICIÓN SUAVE
-// ========================================
-
-function initThemeToggle() {
-    const toggle = $('#themeToggle');
-    const root = document.documentElement;
-    
-    // Cargar tema guardado
-    const savedTheme = localStorage.getItem('tk-theme') || 'dark';
-    root.setAttribute('data-bs-theme', savedTheme);
-    
-    if (toggle) {
-        toggle.addEventListener('click', () => {
-            const current = root.getAttribute('data-bs-theme') || 'dark';
-            const next = current === 'dark' ? 'light' : 'dark';
-            
-            // Añadir clase de transición
-            document.body.style.transition = 'background 0.5s ease, color 0.5s ease';
-            
-            root.setAttribute('data-bs-theme', next);
-            localStorage.setItem('tk-theme', next);
-            
-            // Remover transición después
-            setTimeout(() => {
-                document.body.style.transition = '';
-            }, 500);
-        });
-    }
-}
 
 // ========================================
 // SCROLL PROGRESS BAR
@@ -81,17 +49,16 @@ function initRevealOnScroll() {
     const revealElements = $$('.reveal, .reveal-left, .reveal-right');
     
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
+        entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                setTimeout(() => {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }, index * 100); // Efecto escalonado
+                // Animación inmediata sin delay acumulativo para evitar lag
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
             }
         });
     }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
     });
     
     revealElements.forEach(el => observer.observe(el));

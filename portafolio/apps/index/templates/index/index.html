@@ -193,7 +193,7 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="swiper-pagination"></div>
+                <div class="swiper-pagination swiper-pagination-proyectos"></div>
             </div>
         </div>
     </section>
@@ -240,7 +240,7 @@
                                 <div class="description flex-grow-1 mb-3" style="max-height:120px; overflow-y:auto;">
                                     {{ blog.descripcion|truncatechars:200 }}
                                 </div>
-                                <a href="#" class="btn btn-sm btn-outline-light mt-auto">Leer</a>
+                                <a href="{% url 'blog:blog_detail' blog.slug %}" class="btn btn-sm btn-outline-light mt-auto">Leer</a>
                             </div>
                         </div>
                     </div>
@@ -248,7 +248,7 @@
 
                 </div>
                 <!-- Controles -->
-                <div class="swiper-pagination"></div>
+                <div class="swiper-pagination swiper-pagination-blog"></div>
             </div>
         </div>
     </section>
@@ -315,26 +315,56 @@
                 <div class="tk-card p-5 contact-card">
                     <!-- Email destacado -->
                     <div class="text-center mb-5">
-                        <div class="email-icon-wrapper mb-3">
+                        <a href="mailto:kevinalbertoaguero@gmail.com" class="email-icon-wrapper mb-3">
                             <i class="fas fa-envelope"></i>
-                        </div>
-                        <a href="mailto:contacto@tecnokev.dev" class="email-link">contacto@tecnokev.dev</a>
+                        </a>
+                        <a href="mailto:kevinalbertoaguero@gmail.com" class="email-link">kevinalbertoaguero@gmail.com</a>
                     </div>
 
                     <!-- Redes sociales modernas -->
                     <h5 class="fw-bold text-center mb-4">Conectemos</h5>
                     <div class="social-links-grid">
-                        <a href="#" target="_blank" rel="noreferrer" class="social-link-card github-card">
+                        <a href="https://www.youtube.com/@kev_aguero" target="_blank" rel="noreferrer" class="social-link-card youtube-card">
                             <div class="social-icon">
-                                <i class="fab fa-github"></i>
+                                <i class="fab fa-youtube"></i>
                             </div>
                             <div class="social-info">
-                                <span class="social-name">GitHub</span>
-                                <span class="social-handle">@tecnokev</span>
+                                <span class="social-name">YouTube</span>
+                                <span class="social-handle">@kev_aguero</span>
                             </div>
                         </a>
                         
-                        <a href="#" target="_blank" rel="noreferrer" class="social-link-card linkedin-card">
+                        <a href="https://www.tiktok.com/@kev_aguero" target="_blank" rel="noreferrer" class="social-link-card tiktok-card">
+                            <div class="social-icon">
+                                <i class="fab fa-tiktok"></i>
+                            </div>
+                            <div class="social-info">
+                                <span class="social-name">TikTok</span>
+                                <span class="social-handle">@kev_aguero</span>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.instagram.com/kev_aguero0/" target="_blank" rel="noreferrer" class="social-link-card instagram-card">
+                            <div class="social-icon">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <div class="social-info">
+                                <span class="social-name">Instagram</span>
+                                <span class="social-handle">@kev_aguero0</span>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.facebook.com/kevin.aguero.31586" target="_blank" rel="noreferrer" class="social-link-card facebook-card">
+                            <div class="social-icon">
+                                <i class="fab fa-facebook-f"></i>
+                            </div>
+                            <div class="social-info">
+                                <span class="social-name">Facebook</span>
+                                <span class="social-handle">Kevin Agüero</span>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.linkedin.com/in/kev-aguero/" target="_blank" rel="noreferrer" class="social-link-card linkedin-card">
                             <div class="social-icon">
                                 <i class="fab fa-linkedin-in"></i>
                             </div>
@@ -344,23 +374,13 @@
                             </div>
                         </a>
                         
-                        <a href="#" target="_blank" rel="noreferrer" class="social-link-card twitter-card">
+                        <a href="https://github.com/kevinaguero" target="_blank" rel="noreferrer" class="social-link-card github-card">
                             <div class="social-icon">
-                                <i class="fab fa-twitter"></i>
+                                <i class="fab fa-github"></i>
                             </div>
                             <div class="social-info">
-                                <span class="social-name">Twitter / X</span>
-                                <span class="social-handle">@tecnokev</span>
-                            </div>
-                        </a>
-                        
-                        <a href="#" target="_blank" rel="noreferrer" class="social-link-card telegram-card">
-                            <div class="social-icon">
-                                <i class="fab fa-telegram-plane"></i>
-                            </div>
-                            <div class="social-info">
-                                <span class="social-name">Telegram</span>
-                                <span class="social-handle">@tecnokev</span>
+                                <span class="social-name">GitHub</span>
+                                <span class="social-handle">@kevinaguero</span>
                             </div>
                         </a>
                     </div>
@@ -471,9 +491,24 @@
         box-shadow: 0 10px 30px rgba(0, 224, 255, 0.2);
     }
 
-    .github-card:hover {
-        border-color: #6e5494;
-        box-shadow: 0 10px 30px rgba(110, 84, 148, 0.3);
+    .youtube-card:hover {
+        border-color: #ff6b6b;
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+    }
+
+    .tiktok-card:hover {
+        border-color: #00f2ea;
+        box-shadow: 0 10px 30px rgba(0, 242, 234, 0.3);
+    }
+
+    .instagram-card:hover {
+        border-color: #e1306c;
+        box-shadow: 0 10px 30px rgba(225, 48, 108, 0.3);
+    }
+
+    .facebook-card:hover {
+        border-color: #1877f2;
+        box-shadow: 0 10px 30px rgba(24, 119, 242, 0.3);
     }
 
     .linkedin-card:hover {
@@ -481,14 +516,9 @@
         box-shadow: 0 10px 30px rgba(0, 119, 181, 0.3);
     }
 
-    .twitter-card:hover {
-        border-color: #1da1f2;
-        box-shadow: 0 10px 30px rgba(29, 161, 242, 0.3);
-    }
-
-    .telegram-card:hover {
-        border-color: #0088cc;
-        box-shadow: 0 10px 30px rgba(0, 136, 204, 0.3);
+    .github-card:hover {
+        border-color: #6e5494;
+        box-shadow: 0 10px 30px rgba(110, 84, 148, 0.3);
     }
 
     .social-icon {
@@ -514,10 +544,12 @@
         transition: color 0.3s ease;
     }
 
-    .github-card:hover .social-icon i { color: #6e5494; }
+    .youtube-card:hover .social-icon i { color: #ff6b6b; }
+    .tiktok-card:hover .social-icon i { color: #00f2ea; }
+    .instagram-card:hover .social-icon i { color: #e1306c; }
+    .facebook-card:hover .social-icon i { color: #1877f2; }
     .linkedin-card:hover .social-icon i { color: #0077b5; }
-    .twitter-card:hover .social-icon i { color: #1da1f2; }
-    .telegram-card:hover .social-icon i { color: #0088cc; }
+    .github-card:hover .social-icon i { color: #6e5494; }
 
     .social-info {
         display: flex;
@@ -566,17 +598,6 @@
             flex-direction: column;
             gap: 0.75rem !important;
         }
-    }
-
-    /* Modo claro */
-    [data-bs-theme="light"] .social-link-card {
-        background: rgba(255, 255, 255, 0.8);
-        border-color: rgba(0, 0, 0, 0.1);
-    }
-
-    [data-bs-theme="light"] .info-badge {
-        background: rgba(0, 0, 0, 0.05);
-        border-color: rgba(0, 0, 0, 0.1);
     }
     </style>
 

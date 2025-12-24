@@ -7,7 +7,7 @@ const swiperProyectos = new Swiper('#proyectos-slider', {
     disableOnInteraction: false,
     },
     pagination: {
-    el: '.swiper-pagination',
+    el: '.swiper-pagination-proyectos',
     clickable: true,
     },
     breakpoints: {
@@ -25,7 +25,7 @@ const swiperBlog = new Swiper('#blog-slider', {
     disableOnInteraction: false,
     },
     pagination: {
-    el: '.swiper-pagination',
+    el: '.swiper-pagination-blog',
     clickable: true,
     },
     breakpoints: {

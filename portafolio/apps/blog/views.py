@@ -13,8 +13,8 @@ def blog_view(request):
     return render(request, 'blog/blog.html',{'blogs': blogs, 'categorias': categorias})
 
 
-def blog_detail(request, pk):
-    blog = get_object_or_404(Blog, pk=pk)
+def blog_detail(request, slug):
+    blog = get_object_or_404(Blog, slug=slug)
 
     # ✅ Traer solo comentarios aprobados
     comentarios = blog.comentarios.filter(aprobado=True).order_by('-fecha')
@@ -28,7 +28,7 @@ def blog_detail(request, pk):
             comentario.save()
 
             messages.success(request, "Tu comentario fue enviado y está en espera de aprobación.")
-            return redirect('blog:blog_detail', pk=blog.pk)
+            return redirect('blog:blog_detail', slug=blog.slug)
     else:
         form = ComentarioForm()
 
