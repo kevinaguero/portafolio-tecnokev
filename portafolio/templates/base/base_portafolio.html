@@ -14,6 +14,29 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
         <link rel="stylesheet" href="{% static 'css/modern-styles.css' %}">
         <style>
+            /* Fix para footer pegado al fondo cuando hay poco contenido */
+            html {
+                height: 100%;
+            }
+            
+            body {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            body > nav {
+                flex-shrink: 0;
+            }
+            
+            body > *:not(nav):not(footer):not(script) {
+                flex: 1 0 auto;
+            }
+            
+            footer {
+                flex-shrink: 0;
+                margin-top: auto;
+            }
 
             footer {
             border-top: 1px solid rgba(255,255,255,.08);
@@ -302,6 +325,7 @@
                     <li class="nav-item"><a class="nav-link" href="/#about">Acerca de mí</a></li>
                     <li class="nav-item"><a class="nav-link {% if request.path == '/proyectos' %}active{% endif %}" href="{% url 'proyectos:proyectos_view' %}">Proyectos</a></li>
                     <li class="nav-item"><a class="nav-link {% if request.path == '/blog' %}active{% endif %}" href="{% url 'blog:blog_view' %}">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link {% if request.path == '/minijuegos/' %}active{% endif %}" href="{% url 'minijuegos:minijuegos_view' %}">Minijuegos</a></li>
                     <!-- <li class="nav-item"><a class="nav-link" href="/#cursos">Cursos</a></li> -->
                     <li class="nav-item"><a class="nav-link" href="/#contact">Contacto</a></li>
                 </ul>

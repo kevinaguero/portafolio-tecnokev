@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +43,8 @@ INSTALLED_APPS = [
     'apps.proyecto',
     'apps.blog',
     'apps.configuraciones',
-    # 'ckeditor',  # Comentado temporalmente
+    'minijuegos',
+    'ckeditor',  # Comentado temporalmente
 
 ]
 
@@ -74,18 +76,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'portafolio.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -123,6 +113,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Media Files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -133,7 +124,131 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#try:
-#    from .configuraciones_locales import *
-#except ImportError:
-#    raise Exception("El archivo de configuraciones locales es requerido para ejecutar este proyecto")
+# ========================================
+# JAZZMIN SETTINGS - Admin Moderno
+# ========================================
+
+JAZZMIN_SETTINGS = {
+    # Título de la ventana del navegador (No aparecerá en el admin)
+    "site_title": "TecnoKev Admin",
+
+    # Título en la pantalla de login
+    "site_header": "TecnoKev",
+
+    # Título en el brand (parte superior izquierda)
+    "site_brand": "TecnoKev Admin",
+
+    # Logo que se muestra en la parte superior izquierda (deja vacío si no tienes)
+    "site_logo": None,
+
+    # Logo para el login
+    "login_logo": None,
+
+    # CSS personalizado para el logo
+    "site_logo_classes": "img-circle",
+
+    # URL de bienvenida (opcional)
+    "welcome_sign": "Bienvenido al Panel de Administración",
+
+    # Copyright en el footer
+    "copyright": "TecnoKev - Kevin Agüero",
+
+    # Buscar en la barra lateral
+    "search_model": ["auth.User", "blog.Blog", "proyecto.Proyecto"],
+
+    # Orden del menú de la barra lateral
+    "order_with_respect_to": ["auth", "blog", "proyecto", "configuraciones", "curso", "minijuegos"],
+
+    # Iconos personalizados para los modelos
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "blog.Blog": "fas fa-blog",
+        "blog.Comentario": "fas fa-comments",
+        "proyecto.Proyecto": "fas fa-laptop-code",
+        "configuraciones.Categoria": "fas fa-tags",
+        "configuraciones.Carousel": "fas fa-images",
+        "curso.Curso": "fas fa-graduation-cap",
+    },
+
+    # Iconos por defecto
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+
+    # Temas relacionados
+    "related_modal_active": False,
+
+    # Personalización de tema
+    "custom_css": None,
+    "custom_js": None,
+    "use_google_fonts_cdn": True,
+    "show_ui_builder": False,
+
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
+
+    # Links personalizados en la parte superior
+    "topmenu_links": [
+        {"name": "Inicio", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Ver Sitio", "url": "/", "new_window": True},
+        {"model": "auth.User"},
+    ],
+
+    # Si mostrar o no el sidebar en móviles
+    "show_sidebar": True,
+
+    # Si navegación es expansible
+    "navigation_expanded": True,
+
+    # Ocultar aplicaciones y modelos
+    "hide_apps": [],
+    "hide_models": [],
+
+    # Links de usuario en la parte superior derecha
+    "usermenu_links": [
+        {"model": "auth.user"},
+    ],
+}
+
+# Personalización de UI de Jazzmin
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-dark",
+    "accent": "accent-cyan",
+    "navbar": "navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-cyan",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "cyborg",  # Tema oscuro moderno
+    "dark_mode_theme": "cyborg",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    },
+    "actions_sticky_top": True,
+}
+
+# CSS personalizado para el admin
+JAZZMIN_SETTINGS["custom_css"] = "admin/custom_admin.css"
+
+try:
+   from .configuraciones_locales import *
+except ImportError:
+   raise Exception("El archivo de configuraciones locales es requerido para ejecutar este proyecto")

@@ -1,0 +1,35 @@
+{% extends "admin/base.html" %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        .admin-welcome {
+            background: linear-gradient(135deg, #00e0ff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            margin: 2rem 0;
+            text-shadow: 0 0 30px rgba(0, 224, 255, 0.3);
+        }
+        
+        .admin-subtitle {
+            text-align: center;
+            color: #00e0ff;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="admin-welcome">
+        🚀 TecnoKev Admin Panel
+    </div>
+    <div class="admin-subtitle">
+        Panel de administración moderno - Gestiona tu portafolio tecnológico
+    </div>
+    {{ block.super }}
+{% endblock %}

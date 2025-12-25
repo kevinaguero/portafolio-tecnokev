@@ -1,0 +1,700 @@
+{% extends "base/base_portafolio.html" %}
+{% load static %}
+{% block titulo %}Minijuegos - Tecno Kev{% endblock %}
+{% block contenido %}
+
+<section class="minijuegos-hero">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h1 class="section-title">🎮 Minijuegos</h1>
+            <p class="section-lead">Diviértete con estos juegos clásicos y desafía tus habilidades</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Snake Game -->
+            <div class="col-lg-4 col-md-6">
+                <div class="game-card" data-game="snake">
+                    <div class="game-icon">🐍</div>
+                    <h3>Serpiente de Código</h3>
+                    <p>Recolecta bugs y crece sin chocar con los límites del IDE</p>
+                    <div class="game-score">
+                        <span>Mejor puntaje: <strong id="snake-best">0</strong></span>
+                    </div>
+                    <button class="btn btn-primary" onclick="openGame('snake')">Jugar</button>
+                </div>
+            </div>
+            
+            <!-- Memory Game -->
+            <div class="col-lg-4 col-md-6">
+                <div class="game-card" data-game="memory">
+                    <div class="game-icon">💾</div>
+                    <h3>Memoria RAM</h3>
+                    <p>Encuentra parejas de tecnologías en el menor tiempo posible</p>
+                    <div class="game-score">
+                        <span>Mejor tiempo: <strong id="memory-best">--</strong></span>
+                    </div>
+                    <button class="btn btn-primary" onclick="openGame('memory')">Jugar</button>
+                </div>
+            </div>
+            
+            <!-- Simon Says -->
+            <div class="col-lg-4 col-md-6">
+                <div class="game-card" data-game="simon">
+                    <div class="game-icon">⚡</div>
+                    <h3>Secuencia LED</h3>
+                    <p>Repite la secuencia de luces como un Arduino</p>
+                    <div class="game-score">
+                        <span>Mejor nivel: <strong id="simon-best">0</strong></span>
+                    </div>
+                    <button class="btn btn-primary" onclick="openGame('simon')">Jugar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal para Snake -->
+<div class="game-modal" id="snake-modal">
+    <div class="game-modal-content">
+        <button class="game-close" onclick="closeGame('snake')">✕</button>
+        <h2>🐍 Serpiente de Código</h2>
+        <div class="game-info">
+            <span>Bugs corregidos: <strong id="snake-score">0</strong></span>
+            <button class="btn btn-sm btn-outline-light" onclick="restartSnake()">Reiniciar</button>
+        </div>
+        <canvas id="snake-canvas" width="400" height="400"></canvas>
+        <p class="game-controls">Usa las flechas del teclado o WASD para moverte. Recolecta los 🐛 bugs</p>
+    </div>
+</div>
+
+<!-- Modal para Memory -->
+<div class="game-modal" id="memory-modal">
+    <div class="game-modal-content">
+        <button class="game-close" onclick="closeGame('memory')">✕</button>
+        <h2>💾 Memoria RAM</h2>
+        <div class="game-info">
+            <span>Movimientos: <strong id="memory-moves">0</strong></span>
+            <span>Tiempo: <strong id="memory-time">0s</strong></span>
+            <button class="btn btn-sm btn-outline-light" onclick="restartMemory()">Reiniciar</button>
+        </div>
+        <div id="memory-board" class="memory-board"></div>
+    </div>
+</div>
+
+<!-- Modal para Simon Says -->
+<div class="game-modal" id="simon-modal">
+    <div class="game-modal-content">
+        <button class="game-close" onclick="closeGame('simon')">✕</button>
+        <h2>⚡ Secuencia LED</h2>
+        <div class="game-info">
+            <span>Nivel: <strong id="simon-level">0</strong></span>
+            <button class="btn btn-sm btn-outline-light" onclick="restartSimon()">Reiniciar</button>
+        </div>
+        <div id="simon-board" class="simon-board">
+            <div class="simon-btn simon-green" data-color="green"></div>
+            <div class="simon-btn simon-red" data-color="red"></div>
+            <div class="simon-btn simon-yellow" data-color="yellow"></div>
+            <div class="simon-btn simon-blue" data-color="blue"></div>
+        </div>
+        <p class="game-status" id="simon-status">Presiona "Iniciar" para comenzar</p>
+        <button class="btn btn-primary" id="simon-start" onclick="startSimon()">Iniciar</button>
+    </div>
+</div>
+
+<style>
+/* Ocultar barra de carga y scroll progress */
+.loading-overlay,
+.scroll-progress {
+    display: none !important;
+}
+
+/* Hero Section */
+.minijuegos-hero {
+    padding: 8rem 0 5rem;
+    min-height: 100vh;
+}
+
+/* Game Cards */
+.game-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-card:hover {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 10px 40px rgba(0, 224, 255, 0.15);
+    transform: translateY(-5px);
+}
+
+.game-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.game-card h3 {
+    color: var(--accent-cyan);
+    margin-bottom: 1rem;
+}
+
+.game-card p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.game-score {
+    background: rgba(0, 224, 255, 0.1);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.game-score strong {
+    color: var(--accent-cyan);
+}
+
+/* Game Modal */
+.game-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.game-modal.active {
+    display: flex;
+}
+
+.game-modal-content {
+    background: linear-gradient(180deg, rgba(18, 24, 33, 0.95), rgba(11, 15, 20, 0.95));
+    border: 1px solid rgba(0, 224, 255, 0.3);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    text-align: center;
+}
+
+.game-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.game-close:hover {
+    background: rgba(255, 0, 0, 0.5);
+    transform: rotate(90deg);
+}
+
+.game-info {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.game-info strong {
+    color: var(--accent-cyan);
+}
+
+.game-controls {
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Snake Canvas */
+#snake-canvas {
+    border: 2px solid var(--accent-cyan);
+    border-radius: 0.5rem;
+    background: rgba(0, 0, 0, 0.5);
+    max-width: 100%;
+    height: auto;
+}
+
+/* Memory Board */
+.memory-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, rgba(0, 224, 255, 0.2), rgba(124, 58, 237, 0.2));
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    transform-style: preserve-3d;
+}
+
+.memory-card:hover {
+    transform: scale(1.05);
+}
+
+.memory-card.flipped {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
+    transform: rotateY(180deg);
+}
+
+.memory-card.matched {
+    background: rgba(0, 255, 0, 0.3);
+    border-color: rgba(0, 255, 0, 0.5);
+    cursor: default;
+}
+
+/* Simon Board */
+.simon-board {
+    display: grid;
+    grid-template-columns: repeat(2, 150px);
+    grid-template-rows: repeat(2, 150px);
+    gap: 1rem;
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.simon-btn {
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.simon-btn:hover {
+    transform: scale(1.05);
+}
+
+.simon-btn.active {
+    transform: scale(0.95);
+    filter: brightness(1.5);
+    box-shadow: 0 0 30px currentColor;
+}
+
+.simon-green {
+    background: #00ff00;
+}
+
+.simon-red {
+    background: #ff0000;
+}
+
+.simon-yellow {
+    background: #ffff00;
+}
+
+.simon-blue {
+    background: #0000ff;
+}
+
+.game-status {
+    margin: 1.5rem 0;
+    font-size: 1.1rem;
+    color: var(--accent-cyan);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .minijuegos-hero {
+        padding: 6rem 0 3rem;
+    }
+    
+    .game-modal-content {
+        padding: 1.5rem;
+    }
+    
+    #snake-canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+    
+    .memory-board {
+        gap: 0.5rem;
+        max-width: 100%;
+    }
+    
+    .simon-board {
+        grid-template-columns: repeat(2, 120px);
+        grid-template-rows: repeat(2, 120px);
+    }
+}
+</style>
+
+<script>
+// Gestión de modales
+function openGame(game) {
+    document.getElementById(game + '-modal').classList.add('active');
+    if (game === 'snake') {
+        // Esperar a que el modal sea visible para obtener el canvas
+        setTimeout(() => initSnake(), 100);
+    }
+    if (game === 'memory') initMemory();
+}
+
+function closeGame(game) {
+    document.getElementById(game + '-modal').classList.remove('active');
+    if (game === 'snake') {
+        clearInterval(gameLoop);
+        document.removeEventListener('keydown', handleSnakeInput);
+    }
+    if (game === 'memory') {
+        clearInterval(memoryTimer);
+    }
+}
+
+// ============ SNAKE GAME ============
+let snake, food, direction, score, gameLoop, canvas, ctx;
+const gridSize = 20;
+const tileCount = 20;
+
+function initSnake() {
+    canvas = document.getElementById('snake-canvas');
+    if (!canvas) {
+        console.error('Canvas not found');
+        return;
+    }
+    ctx = canvas.getContext('2d');
+    
+    snake = [{x: 10, y: 10}];
+    food = {x: 15, y: 15};
+    direction = {x: 0, y: 0};
+    score = 0;
+    document.getElementById('snake-score').textContent = score;
+    
+    // Limpiar event listeners previos
+    document.removeEventListener('keydown', handleSnakeInput);
+    document.addEventListener('keydown', handleSnakeInput);
+    
+    clearInterval(gameLoop);
+    drawSnake();
+    gameLoop = setInterval(updateSnake, 150);
+}
+
+function handleSnakeInput(e) {
+    const key = e.key.toLowerCase();
+    if ((key === 'arrowup' || key === 'w') && direction.y === 0) direction = {x: 0, y: -1};
+    if ((key === 'arrowdown' || key === 's') && direction.y === 0) direction = {x: 0, y: 1};
+    if ((key === 'arrowleft' || key === 'a') && direction.x === 0) direction = {x: -1, y: 0};
+    if ((key === 'arrowright' || key === 'd') && direction.x === 0) direction = {x: 1, y: 0};
+}
+
+function updateSnake() {
+    // No mover si no hay dirección establecida (esperando input del jugador)
+    if (direction.x === 0 && direction.y === 0) {
+        return;
+    }
+    
+    const head = {x: snake[0].x + direction.x, y: snake[0].y + direction.y};
+    
+    // Check collisions
+    if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount || 
+        snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+        gameOver('snake');
+        return;
+    }
+    
+    snake.unshift(head);
+    
+    // Check food
+    if (head.x === food.x && head.y === food.y) {
+        score++;
+        document.getElementById('snake-score').textContent = score;
+        placeFood();
+    } else {
+        snake.pop();
+    }
+    
+    drawSnake();
+}
+
+function placeFood() {
+    food = {
+        x: Math.floor(Math.random() * tileCount),
+        y: Math.floor(Math.random() * tileCount)
+    };
+}
+
+function drawSnake() {
+    if (!ctx || !canvas) return;
+    
+    // Limpiar canvas
+    ctx.fillStyle = '#0b0f14';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Dibujar cuadrícula sutil
+    ctx.strokeStyle = 'rgba(0, 224, 255, 0.1)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < tileCount; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * gridSize, 0);
+        ctx.lineTo(i * gridSize, canvas.height);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, i * gridSize);
+        ctx.lineTo(canvas.width, i * gridSize);
+        ctx.stroke();
+    }
+    
+    // Draw snake
+    snake.forEach((segment, i) => {
+        ctx.fillStyle = i === 0 ? '#00e0ff' : '#7c3aed';
+        ctx.fillRect(segment.x * gridSize + 1, segment.y * gridSize + 1, gridSize - 2, gridSize - 2);
+        
+        // Agregar brillo a la cabeza
+        if (i === 0) {
+            ctx.fillStyle = 'rgba(0, 224, 255, 0.3)';
+            ctx.fillRect(segment.x * gridSize + 3, segment.y * gridSize + 3, gridSize - 6, gridSize - 6);
+        }
+    });
+    
+    // Draw food (bug)
+    ctx.fillStyle = '#ff6b00';
+    ctx.fillRect(food.x * gridSize + 1, food.y * gridSize + 1, gridSize - 2, gridSize - 2);
+    ctx.fillStyle = 'rgba(255, 107, 0, 0.5)';
+    ctx.fillRect(food.x * gridSize + 3, food.y * gridSize + 3, gridSize - 6, gridSize - 6);
+}
+
+function restartSnake() {
+    initSnake();
+}
+
+function gameOver(game) {
+    clearInterval(gameLoop);
+    if (game === 'snake') {
+        const best = parseInt(localStorage.getItem('snake-best') || 0);
+        if (score > best) {
+            localStorage.setItem('snake-best', score);
+            document.getElementById('snake-best').textContent = score;
+        }
+        alert(`¡Game Over! 🐛 Bugs corregidos: ${score}`);
+    }
+}
+
+// ============ MEMORY GAME ============
+let memoryCards = [];
+let flippedCards = [];
+let matchedPairs = 0;
+let moves = 0;
+let memoryTimer;
+let memorySeconds = 0;
+
+const emojis = ['💻', '🖥️', '⌨️', '🖱️', '🔌', '💾', '📱', '🤖'];
+
+function initMemory() {
+    const board = document.getElementById('memory-board');
+    memoryCards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+    flippedCards = [];
+    matchedPairs = 0;
+    moves = 0;
+    memorySeconds = 0;
+    document.getElementById('memory-moves').textContent = moves;
+    document.getElementById('memory-time').textContent = '0s';
+    
+    board.innerHTML = '';
+    memoryCards.forEach((emoji, i) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.dataset.emoji = emoji;
+        card.dataset.index = i;
+        card.onclick = () => flipCard(card);
+        board.appendChild(card);
+    });
+    
+    clearInterval(memoryTimer);
+    memoryTimer = setInterval(() => {
+        memorySeconds++;
+        document.getElementById('memory-time').textContent = memorySeconds + 's';
+    }, 1000);
+}
+
+function flipCard(card) {
+    if (card.classList.contains('flipped') || card.classList.contains('matched') || flippedCards.length === 2) return;
+    
+    card.classList.add('flipped');
+    card.textContent = card.dataset.emoji;
+    flippedCards.push(card);
+    
+    if (flippedCards.length === 2) {
+        moves++;
+        document.getElementById('memory-moves').textContent = moves;
+        checkMatch();
+    }
+}
+
+function checkMatch() {
+    const [card1, card2] = flippedCards;
+    
+    if (card1.dataset.emoji === card2.dataset.emoji) {
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+        matchedPairs++;
+        flippedCards = [];
+        
+        if (matchedPairs === emojis.length) {
+            clearInterval(memoryTimer);
+            const best = localStorage.getItem('memory-best');
+            if (!best || memorySeconds < parseInt(best)) {
+                localStorage.setItem('memory-best', memorySeconds);
+                document.getElementById('memory-best').textContent = memorySeconds + 's';
+            }
+            setTimeout(() => alert(`¡Ganaste! Tiempo: ${memorySeconds}s, Movimientos: ${moves}`), 500);
+        }
+    } else {
+        setTimeout(() => {
+            card1.classList.remove('flipped');
+            card2.classList.remove('flipped');
+            card1.textContent = '';
+            card2.textContent = '';
+            flippedCards = [];
+        }, 800);
+    }
+}
+
+function restartMemory() {
+    clearInterval(memoryTimer);
+    initMemory();
+}
+
+// ============ SIMON SAYS ============
+let simonSequence = [];
+let playerSequence = [];
+let simonLevel = 0;
+let simonPlaying = false;
+
+function startSimon() {
+    simonSequence = [];
+    playerSequence = [];
+    simonLevel = 0;
+    document.getElementById('simon-level').textContent = simonLevel;
+    document.getElementById('simon-status').textContent = 'Observa la secuencia...';
+    document.getElementById('simon-start').style.display = 'none';
+    simonPlaying = true;
+    nextRound();
+}
+
+function nextRound() {
+    simonLevel++;
+    document.getElementById('simon-level').textContent = simonLevel;
+    playerSequence = [];
+    
+    const colors = ['green', 'red', 'yellow', 'blue'];
+    simonSequence.push(colors[Math.floor(Math.random() * colors.length)]);
+    
+    playSequence();
+}
+
+function playSequence() {
+    let i = 0;
+    document.querySelectorAll('.simon-btn').forEach(btn => btn.style.pointerEvents = 'none');
+    
+    const interval = setInterval(() => {
+        if (i >= simonSequence.length) {
+            clearInterval(interval);
+            document.querySelectorAll('.simon-btn').forEach(btn => btn.style.pointerEvents = 'auto');
+            document.getElementById('simon-status').textContent = 'Tu turno';
+            return;
+        }
+        
+        const color = simonSequence[i];
+        const btn = document.querySelector(`[data-color="${color}"]`);
+        btn.classList.add('active');
+        setTimeout(() => btn.classList.remove('active'), 300);
+        i++;
+    }, 600);
+}
+
+function handleSimonClick(color) {
+    if (!simonPlaying) return;
+    
+    const btn = document.querySelector(`[data-color="${color}"]`);
+    btn.classList.add('active');
+    setTimeout(() => btn.classList.remove('active'), 200);
+    
+    playerSequence.push(color);
+    
+    if (playerSequence[playerSequence.length - 1] !== simonSequence[playerSequence.length - 1]) {
+        simonGameOver();
+        return;
+    }
+    
+    if (playerSequence.length === simonSequence.length) {
+        setTimeout(nextRound, 1000);
+    }
+}
+
+function simonGameOver() {
+    simonPlaying = false;
+    document.getElementById('simon-status').textContent = `Game Over! Nivel alcanzado: ${simonLevel}`;
+    document.getElementById('simon-start').style.display = 'block';
+    
+    const best = parseInt(localStorage.getItem('simon-best') || 0);
+    if (simonLevel > best) {
+        localStorage.setItem('simon-best', simonLevel);
+        document.getElementById('simon-best').textContent = simonLevel;
+    }
+}
+
+function restartSimon() {
+    simonPlaying = false;
+    document.getElementById('simon-status').textContent = 'Presiona "Iniciar" para comenzar';
+    document.getElementById('simon-start').style.display = 'block';
+    document.getElementById('simon-level').textContent = '0';
+}
+
+// Load best scores
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('snake-best').textContent = localStorage.getItem('snake-best') || 0;
+    document.getElementById('memory-best').textContent = (localStorage.getItem('memory-best') || '--') + (localStorage.getItem('memory-best') ? 's' : '');
+    document.getElementById('simon-best').textContent = localStorage.getItem('simon-best') || 0;
+    
+    // Simon button listeners
+    document.querySelectorAll('.simon-btn').forEach(btn => {
+        btn.onclick = () => handleSimonClick(btn.dataset.color);
+    });
+});
+
+// Close modal on ESC
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        ['snake', 'memory', 'simon'].forEach(game => {
+            if (document.getElementById(game + '-modal').classList.contains('active')) {
+                closeGame(game);
+            }
+        });
+    }
+});
+</script>
+
+{% endblock %}

@@ -47,7 +47,12 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <img src="{{ blog.imagen.url }}" alt="{{ blog.titulo }}" class="img-fluid rounded">
+                <div class="featured-image-wrapper">
+                    <img src="{{ blog.imagen.url }}" alt="{{ blog.titulo }}" class="img-fluid rounded">
+                    {% if blog.imagen_epigrafe %}
+                    <p class="image-caption">{{ blog.imagen_epigrafe }}</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
@@ -80,25 +85,6 @@
 
                 <hr class="blog-divider">
 
-                <!-- Información del autor -->
-                <div class="author-card">
-                    <div class="author-avatar-large">
-                        {% if blog.autor.profile.avatar %}
-                        <img src="{{ blog.autor.profile.avatar.url }}" alt="{{ blog.autor.get_full_name }}">
-                        {% else %}
-                        <div class="avatar-placeholder-large">{{ blog.autor.get_full_name|first|upper }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="author-bio">
-                        <h4>{{ blog.autor.get_full_name|default:"Kevin Agüero" }}</h4>
-                        <p class="text-secondary">Desarrollador Full Stack especializado en crear experiencias web modernas y funcionales.</p>
-                        <div class="author-social">
-                            <a href="https://github.com/kevinaguero" target="_blank"><i class="fab fa-github"></i></a>
-                            <a href="https://www.linkedin.com/in/kev-aguero/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="https://twitter.com/tecnokev" target="_blank"><i class="fab fa-twitter"></i></a>
-                        </div>
-                    </div>
-                </div>
 
                 <hr class="blog-divider">
 
@@ -225,11 +211,28 @@
     padding: 3rem 0;
 }
 
+.featured-image-wrapper {
+    position: relative;
+}
+
 .blog-featured-image img {
     width: 100%;
     height: auto;
     border-radius: 15px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: block;
+}
+
+.image-caption {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(0, 224, 255, 0.05);
+    border-left: 3px solid var(--accent-cyan);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    text-align: center;
 }
 
 /* Blog Content */
