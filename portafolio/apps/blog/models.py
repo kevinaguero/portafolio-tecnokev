@@ -22,6 +22,7 @@ class Blog(models.Model):
     vigencia = models.BooleanField(default=True)
     fecha = models.DateField(auto_now_add=True)
     autor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    colaboradores = models.ManyToManyField(User, related_name='blogs_colaborados', blank=True, help_text="Usuarios que colaboraron en este artículo")
 
     def save(self, *args, **kwargs):
         if not self.slug:

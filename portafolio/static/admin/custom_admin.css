@@ -228,3 +228,161 @@ a:hover {
 .info-box-icon {
     background: linear-gradient(135deg, var(--technokev-cyan), var(--technokev-violet)) !important;
 }
+
+/* ========================================
+   FILTRO HORIZONTAL (Colaboradores/Categorías)
+   ======================================== */
+
+/* Contenedor del selector */
+.selector {
+    background: var(--technokev-surface) !important;
+    border: 1px solid rgba(0, 224, 255, 0.3) !important;
+    border-radius: 8px;
+}
+
+/* Cajas de selección */
+.selector .selector-available,
+.selector .selector-chosen {
+    background: var(--technokev-bg) !important;
+    border: 1px solid rgba(0, 224, 255, 0.2) !important;
+    border-radius: 6px;
+}
+
+/* Títulos de las cajas */
+.selector h2,
+.selector-available h2,
+.selector-chosen h2 {
+    background: linear-gradient(90deg, rgba(0, 224, 255, 0.2), rgba(124, 58, 237, 0.2)) !important;
+    color: #e6f1ff !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid var(--technokev-cyan) !important;
+    padding: 10px !important;
+}
+
+/* Select boxes con opciones */
+.selector select {
+    background: #1a1f2e !important;
+    color: #e6f1ff !important;
+    border: 1px solid rgba(0, 224, 255, 0.2) !important;
+    border-radius: 4px;
+}
+
+/* Opciones individuales */
+.selector select option {
+    background: #1a1f2e !important;
+    color: #e6f1ff !important;
+    padding: 8px 12px !important;
+    border-bottom: 1px solid rgba(0, 224, 255, 0.1);
+}
+
+/* Opciones al pasar el mouse */
+.selector select option:hover {
+    background: rgba(0, 224, 255, 0.2) !important;
+    color: white !important;
+}
+
+/* Opciones seleccionadas */
+.selector select option:checked,
+.selector select option:focus {
+    background: linear-gradient(90deg, rgba(0, 224, 255, 0.3), rgba(124, 58, 237, 0.3)) !important;
+    color: white !important;
+    font-weight: 600;
+}
+
+/* Botones de acción (flechas) */
+.selector .selector-chooser,
+.selector-chooser {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    gap: 10px !important;
+}
+
+.selector .selector-chooser a,
+.selector-chooser a {
+    background: linear-gradient(135deg, var(--technokev-cyan), var(--technokev-violet)) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 12px 15px !important;
+    font-size: 16px !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.selector .selector-chooser a:hover,
+.selector-chooser a:hover {
+    transform: scale(1.1) !important;
+    box-shadow: 0 5px 20px rgba(0, 224, 255, 0.4) !important;
+}
+
+/* Links de filtro */
+.selector .selector-filter,
+.selector-filter {
+    background: rgba(0, 224, 255, 0.05) !important;
+    border: 1px solid rgba(0, 224, 255, 0.2) !important;
+    border-radius: 4px;
+    padding: 8px !important;
+}
+
+.selector .selector-filter label,
+.selector-filter label {
+    color: var(--technokev-cyan) !important;
+    font-weight: 500;
+}
+
+.selector .selector-filter input,
+.selector-filter input {
+    background: #1a1f2e !important;
+    color: #e6f1ff !important;
+    border: 1px solid rgba(0, 224, 255, 0.3) !important;
+    border-radius: 4px;
+    padding: 6px 10px !important;
+}
+
+.selector .selector-filter input:focus,
+.selector-filter input:focus {
+    border-color: var(--technokev-cyan) !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 224, 255, 0.25) !important;
+    outline: none !important;
+}
+
+/* Links de acción (elegir todos, limpiar selección) */
+.selector .selector-chooseall,
+.selector .selector-clearall {
+    color: var(--technokev-cyan) !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    padding: 5px 10px !important;
+    border-radius: 4px !important;
+    transition: all 0.3s ease !important;
+}
+
+.selector .selector-chooseall:hover,
+.selector .selector-clearall:hover {
+    background: rgba(0, 224, 255, 0.1) !important;
+    color: var(--technokev-violet) !important;
+}
+
+/* Estilos específicos para el widget de múltiple selección */
+.related-widget-wrapper select[multiple] {
+    background: #1a1f2e !important;
+    color: #e6f1ff !important;
+    border: 1px solid rgba(0, 224, 255, 0.3) !important;
+    border-radius: 6px;
+    min-height: 200px;
+}
+
+.related-widget-wrapper select[multiple] option {
+    background: #1a1f2e !important;
+    color: #e6f1ff !important;
+    padding: 8px 12px !important;
+}
+
+.related-widget-wrapper select[multiple] option:checked {
+    background: linear-gradient(90deg, rgba(0, 224, 255, 0.3), rgba(124, 58, 237, 0.3)) !important;
+    color: white !important;
+}

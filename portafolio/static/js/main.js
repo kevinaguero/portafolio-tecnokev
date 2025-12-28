@@ -140,9 +140,19 @@ function initParallax() {
     const parallaxBg = $('#parallaxBg');
     
     if (parallaxBg) {
-        window.addEventListener('scroll', () => {
+        let ticking = false;
+
+        const updateParallax = () => {
             const scrolled = window.scrollY;
             parallaxBg.style.transform = `translateY(${scrolled * 0.4}px)`;
+            ticking = false;
+        };
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                ticking = true;
+                requestAnimationFrame(updateParallax);
+            }
         }, { passive: true });
     }
 }
@@ -170,46 +180,6 @@ function initTypingEffect() {
         }, 100);
     });
 }
-
-// ========================================
-// CONTADOR DE VISITAS ANIMADO
-// ========================================
-
-function animateCounter(el, start, end, duration) {
-    if (!el) return;
-    
-    let startTime = null;
-    
-    function step(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const progress = Math.min((timestamp - startTime) / duration, 1);
-        el.textContent = Math.floor(progress * (end - start) + start).toLocaleString();
-        
-        if (progress < 1) {
-            requestAnimationFrame(step);
-        }
-    }
-    
-    requestAnimationFrame(step);
-}
-
-// Fetch del contador de visitas
-fetch('https://visitor.6developer.com/visit', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        domain: window.location.hostname,
-        page_path: window.location.pathname
-    })
-})
-.then(res => res.json())
-.then(data => {
-    const counterEl = $('#visitor-count');
-    if (counterEl && data.totalCount !== undefined) {
-        animateCounter(counterEl, 0, data.totalCount, 1000);
-    }
-})
-.catch(err => console.error('Error al registrar visita:', err));
 
 // ========================================
 // LOADING SCREEN

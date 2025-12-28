@@ -94,6 +94,18 @@
                 border-radius: 3rem;
             }
 
+            /* Ocultar botones del carrusel y silueta en móviles */
+            @media (max-width: 991px) {
+                .carousel-control-prev,
+                .carousel-control-next {
+                    display: none !important;
+                }
+                
+                .hero-silueta {
+                    display: none !important;
+                }
+            }
+
             @media (max-width: 768px) {
                 #header-carousel .carousel-item {
                     position: relative;
@@ -275,6 +287,91 @@
             .tk-card{background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)); border:1px solid rgba(255,255,255,.08); border-radius:1.25rem; overflow:hidden}
             .tk-card:hover{border-color: rgba(0,224,255,.5); box-shadow:0 10px 30px rgba(0,224,255,.08)}
 
+            /* Dropdown Filters */
+            .dropdown-filter-wrapper {
+                position: relative;
+                display: inline-block;
+            }
+
+            .btn-dropdown-filter {
+                background: linear-gradient(135deg, rgba(0, 224, 255, 0.1), rgba(124, 58, 237, 0.1));
+                border: 1px solid rgba(0, 224, 255, 0.3);
+                color: var(--text-primary);
+                padding: 0.75rem 1.5rem;
+                border-radius: 12px;
+                font-weight: 500;
+                font-size: 0.95rem;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                cursor: pointer;
+                white-space: nowrap;
+            }
+
+            .btn-dropdown-filter:hover {
+                background: linear-gradient(135deg, rgba(0, 224, 255, 0.2), rgba(124, 58, 237, 0.2));
+                border-color: var(--accent-cyan);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 20px rgba(0, 224, 255, 0.3);
+            }
+
+            .btn-dropdown-filter .fa-chevron-down {
+                font-size: 0.75rem;
+                transition: transform 0.3s ease;
+            }
+
+            .btn-dropdown-filter[aria-expanded="true"] .fa-chevron-down {
+                transform: rotate(180deg);
+            }
+
+            .dropdown-menu-filter {
+                background: rgba(17, 24, 39, 0.95);
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(0, 224, 255, 0.3);
+                border-radius: 12px;
+                padding: 0.5rem;
+                margin-top: 0.5rem;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+                min-width: 200px;
+                max-height: 400px;
+                overflow-y: auto;
+            }
+
+            .dropdown-menu-filter .dropdown-item {
+                color: var(--text-secondary);
+                padding: 0.75rem 1rem;
+                border-radius: 8px;
+                transition: all 0.2s ease;
+                font-size: 0.95rem;
+                cursor: pointer;
+            }
+
+            .dropdown-menu-filter .dropdown-item:hover {
+                background: rgba(0, 224, 255, 0.1);
+                color: var(--text-primary);
+                transform: translateX(5px);
+            }
+
+            .dropdown-menu-filter .dropdown-item.active {
+                background: linear-gradient(135deg, rgba(0, 224, 255, 0.2), rgba(124, 58, 237, 0.2));
+                color: var(--accent-cyan);
+                font-weight: 600;
+                position: relative;
+            }
+
+            .dropdown-menu-filter .dropdown-item.active::before {
+                content: '✓';
+                position: absolute;
+                left: 0.5rem;
+                color: var(--accent-cyan);
+                font-weight: bold;
+            }
+
+            .dropdown-menu-filter .dropdown-item.active {
+                padding-left: 2rem;
+            }
+
             /* portafolio grid */
             .portafolio-filters .btn{border-color: rgba(255,255,255,.14)}
             .portafolio-filters .btn.active{background: var(--tk-primary); color:#00131a; border-color:transparent}
@@ -285,6 +382,18 @@
 
             /* About */
             .about-avatar{width:110px; height:110px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.2)}
+
+            /* Section Headers - Desktop */
+            .section-header-wrapper {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                gap: 1.5rem;
+            }
+
+            .section-header-text {
+                flex: 1;
+            }
 
             /* Contact */
             .form-control, .form-select{background: rgba(255,255,255,.02); color: var(--tk-text); border:1px solid rgba(255,255,255,.12)}
@@ -372,12 +481,6 @@
 
                                 <!-- ...existing code... -->
 
-        <!-- Contador de visitas discreto en esquina inferior derecha -->
-        <div class="visitor-counter-discrete">
-            <i class="fas fa-eye"></i>
-            <span id="visitor-count">0</span>
-        </div>
-
         <!-- Efecto de partículas sutil en el footer -->
         <div class="footer-glow"></div>
     </footer>
@@ -415,37 +518,6 @@
         font-size: 1.3rem;
         font-weight: 700;
         margin-bottom: 1rem;
-    }
-
-    .visitor-counter-discrete {
-        position: absolute;
-        bottom: 1rem;
-        right: 2rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.4rem 0.8rem;
-        background: rgba(0, 224, 255, 0.05);
-        border: 1px solid rgba(0, 224, 255, 0.1);
-        border-radius: 20px;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-        transition: all 0.3s ease;
-    }
-
-    .visitor-counter-discrete i {
-        font-size: 0.9rem;
-        color: var(--accent-cyan);
-    }
-
-    .visitor-counter-discrete span {
-        font-weight: 600;
-        color: var(--text-primary);
-    }
-
-    .visitor-counter-discrete:hover {
-        background: rgba(0, 224, 255, 0.08);
-        border-color: rgba(0, 224, 255, 0.2);
     }
 
     .footer-copyright-compact {
@@ -574,18 +646,53 @@
             padding: 2rem 0 4rem;
         }
 
-        .visitor-counter-discrete {
-            bottom: 0.5rem;
-            right: 50%;
-            transform: translateX(50%);
-        }
-
         .footer-copyright-compact {
             text-align: center !important;
         }
 
         .tech-badges {
             justify-content: flex-start;
+        }
+
+        /* Section Headers Mobile: título y botón a la izquierda, filtro alineado al mismo nivel */
+        .section-header-wrapper {
+            display: block;
+            position: relative;
+        }
+
+        .section-header-text {
+            width: 100%;
+            padding-right: 0;
+        }
+
+        .section-header-text .section-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header-text .section-lead {
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-header-text .btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+            margin-top: 0.5rem !important;
+            display: inline-block;
+        }
+
+        /* Filtro alineado al nivel del botón */
+        .section-header-wrapper .dropdown-filter-wrapper {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        .section-header-wrapper .btn-dropdown-filter {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
         }
     }
 
@@ -609,48 +716,7 @@
         requestAnimationFrame(step);
     }
 
-    let visitorCounterLoaded = false;
-    function loadVisitorCounter() {
-        if (visitorCounterLoaded) return;
-        visitorCounterLoaded = true;
-        fetch('https://visitor.6developer.com/visit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                domain: window.location.hostname,
-                page_path: window.location.pathname
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            const el = document.getElementById('visitor-count');
-            if (el && data.totalCount !== undefined) {
-                animateCounter(el, 0, data.totalCount, 700);
-            }
-        })
-        .catch(err => console.error('Error al registrar visita:', err));
-    }
-
-    function isFooterInView() {
-        const footer = document.querySelector('.modern-footer');
-        if (!footer) return false;
-        const rect = footer.getBoundingClientRect();
-        return (
-            rect.top < window.innerHeight &&
-            rect.bottom > 0
-        );
-    }
-
-    window.addEventListener('scroll', function() {
-        if (isFooterInView()) {
-            loadVisitorCounter();
-        }
-    });
-    // Por si el usuario ya está abajo al cargar
-    window.addEventListener('DOMContentLoaded', function() {
-        if (isFooterInView()) {
-            loadVisitorCounter();
-        }
+    // Contador de visitas eliminado
     });
     </script>
 

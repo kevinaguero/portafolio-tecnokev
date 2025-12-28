@@ -10,3 +10,12 @@ wheels/
 .venv
 .idea/
 configuraciones_locales.py
+
+# Django static files
+staticfiles/
+
+# Django media files (avatars y contenido subido por usuarios)
+avatars/
+blog/
+proyectos/
+about/

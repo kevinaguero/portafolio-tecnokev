@@ -25,11 +25,11 @@
                             {% if blog.autor.profile.avatar %}
                             <img src="{{ blog.autor.profile.avatar.url }}" alt="{{ blog.autor.get_full_name }}">
                             {% else %}
-                            <div class="avatar-placeholder">{{ blog.autor.get_full_name|first|upper }}</div>
+                            <img src="{% static 'img/default-avatar.svg' %}" alt="Avatar por defecto">
                             {% endif %}
                         </div>
                         <div class="author-details">
-                            <span class="author-name">{{ blog.autor.get_full_name|default:"Kevin Agüero" }}</span>
+                            <span class="author-name">{{ blog.autor.get_full_name|default:blog.autor.username }}</span>
                             <span class="blog-date">{{ blog.fecha|date:"d M, Y" }}</span>
                         </div>
                     </div>
@@ -37,6 +37,29 @@
                         <span><i class="fas fa-clock"></i> {% widthratio blog.contenido|wordcount 200 1 %} min de lectura</span>
                     </div>
                 </div>
+
+                <!-- Colaboradores -->
+                {% if blog.colaboradores.exists %}
+                <div class="blog-collaborators mt-4">
+                    <h6 class="collaborators-label">
+                        <i class="fas fa-users"></i> Colaboradores:
+                    </h6>
+                    <div class="collaborators-list">
+                        {% for colaborador in blog.colaboradores.all %}
+                        <div class="collaborator-item">
+                            <div class="collaborator-avatar">
+                                {% if colaborador.profile.avatar %}
+                                <img src="{{ colaborador.profile.avatar.url }}" alt="{{ colaborador.get_full_name }}" title="{{ colaborador.get_full_name|default:colaborador.username }}">
+                                {% else %}
+                                <img src="{% static 'img/default-avatar.svg' %}" alt="Avatar por defecto" title="{{ colaborador.get_full_name|default:colaborador.username }}">
+                                {% endif %}
+                            </div>
+                            <span class="collaborator-name">{{ colaborador.get_full_name|default:colaborador.username }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -156,28 +179,19 @@
     gap: 1rem;
 }
 
-.author-avatar, .avatar-placeholder {
+.author-avatar {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid var(--accent-cyan);
+    box-shadow: 0 0 20px rgba(0, 224, 255, 0.3);
 }
 
 .author-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.avatar-placeholder {
-    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: white;
 }
 
 .author-details {
@@ -204,6 +218,73 @@
 .blog-stats i {
     color: var(--accent-cyan);
     margin-right: 0.5rem;
+}
+
+/* Collaborators */
+.blog-collaborators {
+    padding: 1.5rem;
+    background: rgba(0, 224, 255, 0.03);
+    border: 1px solid rgba(0, 224, 255, 0.15);
+    border-radius: 12px;
+}
+
+.collaborators-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.collaborators-label i {
+    color: var(--accent-violet);
+    margin-right: 0.5rem;
+}
+
+.collaborators-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.collaborator-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: rgba(138, 43, 226, 0.05);
+    border: 1px solid rgba(138, 43, 226, 0.2);
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.collaborator-item:hover {
+    background: rgba(138, 43, 226, 0.1);
+    border-color: rgba(138, 43, 226, 0.4);
+    transform: translateY(-2px);
+}
+
+.collaborator-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--accent-violet);
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+    flex-shrink: 0;
+}
+
+.collaborator-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.collaborator-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
 }
 
 /* Featured Image */

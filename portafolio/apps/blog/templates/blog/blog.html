@@ -12,13 +12,18 @@
       </div>
       
       {% if blogs|length > 0 and categorias %}
-      <div class="portafolio-filters btn-group" id="filtros-blog-page" role="group" aria-label="Filtros de blog">
-        <button class="btn btn-outline-light active" data-filter="*">Todos</button>
-        {% for categoria in categorias %}
-        <button class="btn btn-outline-light" data-filter="{{ categoria.id }}">
-          {{ categoria.nombre }}
+      <div class="dropdown-filter-wrapper">
+        <button class="btn-dropdown-filter" id="dropdown-blog-page" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fas fa-filter me-2"></i>
+          <span class="filter-text">Todos</span>
+          <i class="fas fa-chevron-down ms-2"></i>
         </button>
-        {% endfor %}
+        <ul class="dropdown-menu dropdown-menu-filter" aria-labelledby="dropdown-blog-page">
+          <li><a class="dropdown-item active" href="#" data-filter="*" data-dropdown="dropdown-blog-page">Todos</a></li>
+          {% for categoria in categorias %}
+          <li><a class="dropdown-item" href="#" data-filter="{{ categoria.id }}" data-dropdown="dropdown-blog-page">{{ categoria.nombre }}</a></li>
+          {% endfor %}
+        </ul>
       </div>
       {% endif %}
     </div>
@@ -53,20 +58,32 @@
   </div>
 </section>
 
-<!-- JavaScript para filtros -->
+<!-- JavaScript para filtros con dropdown -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const filterButtons = document.querySelectorAll('#filtros-blog-page .btn');
+    const dropdownItems = document.querySelectorAll('.dropdown-menu-filter .dropdown-item');
     const blogCards = document.querySelectorAll('.blog-card');
 
     console.log('Total cards:', blogCards.length);
 
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Remover active de todos los botones
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            // Agregar active al botón clickeado
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Obtener el dropdown al que pertenece
+            const dropdownId = this.getAttribute('data-dropdown');
+            const dropdownButton = document.getElementById(dropdownId);
+            const filterText = dropdownButton.querySelector('.filter-text');
+            
+            // Remover active de todos los items del mismo dropdown
+            const parentMenu = this.closest('.dropdown-menu-filter');
+            parentMenu.querySelectorAll('.dropdown-item').forEach(btn => btn.classList.remove('active'));
+            
+            // Agregar active al item clickeado
             this.classList.add('active');
+            
+            // Actualizar el texto del botón
+            filterText.textContent = this.textContent;
 
             const filterValue = this.getAttribute('data-filter');
             console.log('Filtrando por:', filterValue);

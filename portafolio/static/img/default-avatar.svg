@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00e0ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fondo circular con gradiente -->
+  <circle cx="200" cy="200" r="200" fill="url(#grad1)" opacity="0.9"/>
+  
+  <!-- Cabeza del usuario -->
+  <circle cx="200" cy="150" r="60" fill="rgba(255,255,255,0.9)"/>
+  
+  <!-- Cuerpo del usuario -->
+  <ellipse cx="200" cy="320" rx="100" ry="120" fill="rgba(255,255,255,0.9)"/>
+  
+  <!-- Ocultar la parte inferior -->
+  <rect x="0" y="350" width="400" height="50" fill="url(#grad1)"/>
+</svg>

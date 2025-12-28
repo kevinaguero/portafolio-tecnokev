@@ -220,6 +220,101 @@
 }
 
 /* ========================================
+   NAVBAR TOGGLER (BOTÓN HAMBURGUESA)
+   ======================================== */
+
+.navbar-toggler {
+    border: 2px solid var(--accent-cyan);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(0, 224, 255, 0.1), rgba(124, 58, 237, 0.1));
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 20px rgba(0, 224, 255, 0.5);
+    outline: none;
+}
+
+.navbar-toggler:hover {
+    transform: scale(1.05);
+    border-color: var(--accent-violet);
+    background: linear-gradient(135deg, rgba(0, 224, 255, 0.2), rgba(124, 58, 237, 0.2));
+    box-shadow: 0 5px 20px rgba(0, 224, 255, 0.3);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(0, 224, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* Animación del toggler cuando está activo */
+.navbar-toggler[aria-expanded="true"] {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(0, 224, 255, 0.2));
+    border-color: var(--accent-violet);
+}
+
+.navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(124, 58, 237, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2.5' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    transform: rotate(90deg);
+}
+
+/* ========================================
+   RESPONSIVE - DESHABILITAR EFECTOS HOVER EN MÓVILES
+   ======================================== */
+
+@media (max-width: 991px) {
+    /* Deshabilitar el efecto de línea degradada en móviles */
+    .nav-link::before {
+        display: none;
+    }
+    
+    /* Eliminar transformación en hover para móviles */
+    .nav-link:hover {
+        transform: none;
+    }
+    
+    /* Mantener color hover pero sin animaciones */
+    .nav-link:hover {
+        color: var(--accent-cyan) !important;
+    }
+    
+    /* Estilo para enlaces activos en móviles */
+    .nav-link.active {
+        color: var(--accent-cyan) !important;
+        background: rgba(0, 224, 255, 0.1);
+        border-radius: 8px;
+    }
+    
+    /* Mejorar espaciado en menú móvil */
+    .navbar-collapse {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: rgba(18, 24, 33, 0.98);
+        border-radius: 12px;
+        border: 1px solid rgba(0, 224, 255, 0.2);
+        backdrop-filter: blur(10px);
+    }
+    
+    .nav-link {
+        padding: 0.75rem 1rem !important;
+        margin: 0.25rem 0;
+        border-radius: 8px;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+}
+
+/* Mantener efectos completos en desktop */
+@media (min-width: 992px) {
+    .nav-link::before {
+        display: block;
+    }
+}
+
+/* ========================================
    HERO SECTION MEJORADO
    ======================================== */
 
@@ -305,6 +400,38 @@
 .hero-silueta {
     animation: float 6s ease-in-out infinite;
     filter: drop-shadow(0 0 30px rgba(0, 224, 255, 0.3));
+}
+
+/* Botones del hero responsivos */
+.hero-buttons {
+    flex-wrap: wrap;
+}
+
+.hero-buttons .btn {
+    white-space: nowrap;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+}
+
+@media (max-width: 576px) {
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.75rem !important;
+    }
+    
+    .hero-buttons .btn {
+        width: 100%;
+        font-size: 0.95rem;
+        padding: 0.7rem 1.2rem;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .hero-buttons .btn {
+        font-size: 0.9rem;
+        padding: 0.65rem 1.2rem;
+    }
 }
 
 /* ========================================
@@ -409,6 +536,15 @@
 .btn-primary:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 25px rgba(0, 224, 255, 0.3);
+    color: white;
+}
+
+.btn-primary:active,
+.btn-primary:focus {
+    background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
+    color: white !important;
+    box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.4);
+    transform: translateY(1px);
 }
 
 .btn-outline-light {
@@ -423,6 +559,15 @@
     border-color: rgba(124, 58, 237, 0.4);
     color: white;
     /* No popup/raise effect */
+}
+
+.btn-outline-light:active,
+.btn-outline-light:focus {
+    background: linear-gradient(135deg, rgba(0, 224, 255, 0.3), rgba(124, 58, 237, 0.3));
+    border-color: var(--accent-cyan);
+    color: white !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 224, 255, 0.25);
+    transform: translateY(1px);
 }
 
 .btn-outline-light.active {
@@ -691,4 +836,72 @@ footer .counter {
     }
 }
 
+/* ========================================
+   SWIPER - ALINEACIÓN DE CARDS Y OPTIMIZACIÓN
+   ======================================== */
 
+/* Optimización de rendimiento para Swiper */
+.swiper {
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    content-visibility: auto;
+    contain: layout style paint;
+}
+
+.swiper-wrapper {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+/* Hacer que todos los slides tengan la misma altura */
+.swiper-slide {
+    height: auto !important;
+    display: flex !important;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    content-visibility: auto;
+    contain: layout style paint;
+}
+
+/* Ocultar slides filtrados completamente */
+.swiper-slide-hidden {
+    display: none !important;
+}
+
+/* Las cards deben ocupar el 100% de altura del slide */
+.swiper-slide .tk-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    will-change: transform;
+}
+
+/* Optimizar imágenes para evitar reflow */
+.swiper-slide .tk-card img {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+    content-visibility: auto;
+}
+
+/* El contenido de la card debe usar flex para distribuir espacio */
+.swiper-slide .tk-card .p-4 {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* La descripción debe crecer para empujar los botones al final */
+.swiper-slide .tk-card .description {
+    flex: 1;
+}
+
+/* Asegurar que las imágenes tengan altura fija */
+.swiper-slide .tk-card img {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+}

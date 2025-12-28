@@ -57,7 +57,7 @@
                         <span class="badge rounded-pill badge-tech px-3 py-2">Automatización • IA • Web • Datos</span>
                         <h1 class="mt-3">Hola, soy <span style="color:var(--accent-cyan)">Kevin Agüero</span> — <span style="color:var(--accent-violet)">Tecno Kev</span></h1>
                         <p class="lead">Desarrollo soluciones end-to-end: desde backend y pipelines de datos, hasta interfaces modernas. Aquí comparto mi portafolio, artículos y notas técnicas.</p>
-                        <div class="d-flex gap-3 justify-content-center mt-4 reveal">
+                        <div class="d-flex gap-3 justify-content-center mt-4 reveal hero-buttons">
                             <a href="#proyectos" class="btn btn-primary btn-lg">Ver proyectos</a>
                             <a href="#contact" class="btn btn-outline-light btn-lg">Hablemos</a>
                         </div>
@@ -85,6 +85,36 @@
     <section id="about" class="position-relative">
         <div class="container">
         <div class="row g-4 align-items-center">
+            <!-- Card Principal -->
+            {% if about_principal %}
+            <div class="col-lg-5 reveal-left">
+            <div class="tk-card p-4 tilt-card">
+                {% if about_principal.avatar and about_principal.avatar.name %}
+                <img class="about-avatar mb-3" src="{{ about_principal.avatar.url }}" alt="Avatar" />
+                {% else %}
+                <img class="about-avatar mb-3" src="{% static 'img/avatar.jpg' %}" alt="Avatar" />
+                {% endif %}
+                <h2 class="section-title mb-3">{{ about_principal.titulo }}</h2>
+                <p class="section-lead">{{ about_principal.descripcion }}</p>
+                
+                {% if about_principal.badges.exists %}
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    {% for badge in about_principal.badges.all %}
+                    <span class="badge text-bg-dark border">
+                        {% if badge.icono_tipo == 'url' %}
+                            <img src="{{ badge.icono }}" alt="{{ badge.nombre }}" width="16" height="16" class="me-1">
+                        {% elif badge.icono %}
+                            <i class="{{ badge.icono }} me-1"></i>
+                        {% endif %}
+                        {{ badge.nombre }}
+                    </span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            </div>
+            {% else %}
+            <!-- Fallback en caso de que no haya card principal configurada -->
             <div class="col-lg-5 reveal-left">
             <div class="tk-card p-4 tilt-card">
                 <img class="about-avatar mb-3" src="{%static 'img/avatar.jpg'%}" alt="Avatar" />
@@ -101,8 +131,32 @@
                 </div>
             </div>
             </div>
+            {% endif %}
+            
+            <!-- Cards Secundarias -->
             <div class="col-lg-7 reveal-right">
             <div class="row g-4">
+                {% if about_secundarias %}
+                    {% for seccion in about_secundarias %}
+                    <div class="col-sm-6">
+                    <div class="tk-card h-100 p-4 reveal tilt-card">
+                        {% if seccion.icono %}
+                        <i class="{{ seccion.icono }} mb-2" style="font-size: 1.5rem; color: var(--accent-cyan);"></i>
+                        {% endif %}
+                        <h5 class="fw-bold">{{ seccion.titulo }}</h5>
+                        <p class="{% if seccion.list_items.exists %}mb-2{% else %}mb-0{% endif %}">{{ seccion.descripcion }}</p>
+                        {% if seccion.list_items.exists %}
+                        <ul class="mb-0 small text-secondary ps-3">
+                            {% for item in seccion.list_items.all %}
+                            <li>{{ item.texto }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <!-- Fallback en caso de que no haya cards secundarias -->
                 <div class="col-sm-6">
                 <div class="tk-card h-100 p-4 reveal tilt-card">
                     <h5 class="fw-bold">Qué hago</h5>
@@ -132,6 +186,7 @@
                     <p class="mb-0">Proyectos y consultoría. ¿Tenés una idea? La iteramos y la lanzamos.</p>
                 </div>
                 </div>
+                {% endif %}
             </div>
             </div>
         </div>
@@ -141,21 +196,25 @@
     {% if proyectos %}
     <section id="proyectos" class="reveal">
         <div class="container">
-            <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
-                <div class="reveal-left">
+            <div class="section-header-wrapper mb-4">
+                <div class="section-header-text">
                     <h2 class="section-title">Proyectos</h2>
                     <p class="section-lead">Algunos trabajos recientes. Filtrá por categoría.</p>
                     <a href="{% url 'proyectos:proyectos_view' %}" class="btn btn-outline-light mt-2">Ver todos</a>
                 </div>
-
                 {% if proyectos|length > 3 %}
-                <div class="portafolio-filters btn-group" id="filtros-proyectos" role="group" aria-label="Filtros de portafolio">
-                    <button class="btn btn-outline-light active" data-filter="*">Todos</button>
-                    {% for cat in categorias_proyectos %}
-                        <button class="btn btn-outline-light" data-filter="{{ cat.id }}">
-                            {{ cat.nombre }}
-                        </button>
-                    {% endfor %}
+                <div class="dropdown-filter-wrapper">
+                    <button class="btn-dropdown-filter" id="dropdown-proyectos" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-filter me-2"></i>
+                        <span class="filter-text">Todos</span>
+                        <i class="fas fa-chevron-down ms-2"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-filter" aria-labelledby="dropdown-proyectos">
+                        <li><a class="dropdown-item active" href="#" data-filter="*" data-dropdown="dropdown-proyectos">Todos</a></li>
+                        {% for cat in categorias_proyectos %}
+                        <li><a class="dropdown-item" href="#" data-filter="{{ cat.id }}" data-dropdown="dropdown-proyectos">{{ cat.nombre }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </div>
                 {% endif %}
             </div>
@@ -166,7 +225,7 @@
                     {% for proyecto in proyectos %}
                     <div class="swiper-slide portafolio-item" data-cat="{% for c in proyecto.categorias.all %}{{ c.id }} {% endfor %}">
                         <div class="tk-card h-100 d-flex flex-column">
-                            <img src="{{ proyecto.imagen.url }}" alt="{{ proyecto.titulo }}" />
+                            <img src="{{ proyecto.imagen.url }}" alt="{{ proyecto.titulo }}" loading="lazy" decoding="async" />
                             <div class="p-4 d-flex flex-column flex-grow-1">
                                 <h5 class="fw-bold mb-1">{{ proyecto.titulo }}</h5>
                                 <p class="text-secondary small mb-3">
@@ -205,20 +264,25 @@
     {% if blogs %}
     <section id="blog" class="reveal">
         <div class="container">
-            <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
-                <div class="reveal-left">
+            <div class="section-header-wrapper mb-4">
+                <div class="section-header-text">
                     <h2 class="section-title">Blog</h2>
                     <p class="section-lead">Notas técnicas, tutoriales y experimentos.</p>
                     <a href="{%url 'blog:blog_view' %}" class="btn btn-outline-light mt-2">Ver todos</a>
                 </div>
                 {% if blogs|length > 3 %}
-                <div id="filtros-blogs" class="portafolio-filters btn-group" role="group" aria-label="Filtros de portafolio">
-                    <button class="btn btn-outline-light active" data-filter="*">Todos</button>
-                    {% for cat in categorias_blogs %}
-                    <button class="btn btn-outline-light" data-filter="{{ cat.id }}">
-                            {{ cat.nombre }}
-                        </button>
-                    {% endfor %}
+                <div class="dropdown-filter-wrapper">
+                    <button class="btn-dropdown-filter" id="dropdown-blogs" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-filter me-2"></i>
+                        <span class="filter-text">Todos</span>
+                        <i class="fas fa-chevron-down ms-2"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-filter" aria-labelledby="dropdown-blogs">
+                        <li><a class="dropdown-item active" href="#" data-filter="*" data-dropdown="dropdown-blogs">Todos</a></li>
+                        {% for cat in categorias_blogs %}
+                        <li><a class="dropdown-item" href="#" data-filter="{{ cat.id }}" data-dropdown="dropdown-blogs">{{ cat.nombre }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </div>
                 {% endif %}
             </div>
@@ -230,7 +294,7 @@
                     <!-- Item 1 -->
                     <div class="swiper-slide portafolio-item" data-cat="{% for c in blog.categorias.all %}{{ c.id }} {% endfor %}">
                         <div class="tk-card h-100 d-flex flex-column">
-                            <img src="{{blog.imagen.url}}" alt="{{blog.titulo}}" />
+                            <img src="{{blog.imagen.url}}" alt="{{blog.titulo}}" loading="lazy" decoding="async" />
                             <div class="p-4 d-flex flex-column flex-grow-1">
                                 <h5 class="fw-bold mb-1">{{blog.titulo}}</h5>
                                 <p class="text-secondary small mb-3">

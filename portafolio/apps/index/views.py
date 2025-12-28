@@ -3,6 +3,7 @@ from apps.blog.models import Blog
 from apps.curso.models import Curso
 from apps.proyecto.models import Proyecto
 from apps.configuraciones.models import Categoria, Carousel
+from .models import AboutSection
 
 # Create your views here.
 def index_view(request):
@@ -16,6 +17,10 @@ def index_view(request):
 
     # Categorías relacionadas con blogs
     categorias_blogs = Categoria.objects.filter(blog__isnull=False).distinct()
+    
+    # Secciones de "Acerca de mí"
+    about_principal = AboutSection.objects.filter(tipo='principal', vigencia=True).prefetch_related('badges').first()
+    about_secundarias = AboutSection.objects.filter(tipo='secundaria', vigencia=True).prefetch_related('list_items')
 
     return render(request, 'index/index.html',{
         'proyectos': proyectos, 
@@ -24,4 +29,6 @@ def index_view(request):
         'carousels': carousels,
         'categorias_proyectos': categorias_proyectos,
         'categorias_blogs': categorias_blogs,
+        'about_principal': about_principal,
+        'about_secundarias': about_secundarias,
     })

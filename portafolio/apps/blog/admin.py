@@ -11,7 +11,7 @@ class BlogAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('titulo',)}
     date_hierarchy = 'fecha'
     ordering = ['-fecha']
-    filter_horizontal = ['categorias']
+    filter_horizontal = ['categorias', 'colaboradores']
     
     fieldsets = (
         ('Información Principal', {
@@ -23,6 +23,10 @@ class BlogAdmin(admin.ModelAdmin):
         ('Imagen Destacada', {
             'fields': ('imagen', 'imagen_epigrafe'),
             'description': 'La imagen se recortará automáticamente a 1200x630px'
+        }),
+        ('Colaboradores', {
+            'fields': ('colaboradores',),
+            'description': 'Selecciona los usuarios que colaboraron en este artículo'
         }),
         ('Categorización', {
             'fields': ('categorias', 'vigencia')

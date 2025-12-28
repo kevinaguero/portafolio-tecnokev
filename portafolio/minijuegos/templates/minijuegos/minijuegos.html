@@ -63,6 +63,27 @@
             <button class="btn btn-sm btn-outline-light" onclick="restartSnake()">Reiniciar</button>
         </div>
         <canvas id="snake-canvas" width="400" height="400"></canvas>
+        
+        <!-- Controles móviles -->
+        <div class="mobile-controls" id="snake-mobile-controls">
+            <div class="control-row">
+                <button class="control-btn" onclick="changeSnakeDirection('up')">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+            </div>
+            <div class="control-row">
+                <button class="control-btn" onclick="changeSnakeDirection('left')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <button class="control-btn" onclick="changeSnakeDirection('down')">
+                    <i class="fas fa-arrow-down"></i>
+                </button>
+                <button class="control-btn" onclick="changeSnakeDirection('right')">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+        
         <p class="game-controls">Usa las flechas del teclado o WASD para moverte. Recolecta los 🐛 bugs</p>
     </div>
 </div>
@@ -229,6 +250,60 @@
     font-size: 0.9rem;
 }
 
+/* Controles móviles */
+.mobile-controls {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.control-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.control-btn {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, rgba(0, 224, 255, 0.2), rgba(124, 58, 237, 0.2));
+    border: 2px solid var(--accent-cyan);
+    border-radius: 12px;
+    color: var(--accent-cyan);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+    background: linear-gradient(135deg, rgba(0, 224, 255, 0.4), rgba(124, 58, 237, 0.4));
+    box-shadow: 0 0 20px rgba(0, 224, 255, 0.5);
+}
+
+.control-btn:hover {
+    border-color: var(--accent-violet);
+    box-shadow: 0 5px 15px rgba(0, 224, 255, 0.3);
+}
+
+/* Mostrar controles solo en móviles */
+@media (max-width: 768px) {
+    .mobile-controls {
+        display: flex;
+    }
+    
+    .game-controls {
+        font-size: 0.8rem;
+    }
+}
+
 /* Snake Canvas */
 #snake-canvas {
     border: 2px solid var(--accent-cyan);
@@ -356,6 +431,9 @@
 // Gestión de modales
 function openGame(game) {
     document.getElementById(game + '-modal').classList.add('active');
+    // Bloquear scroll del body
+    document.body.style.overflow = 'hidden';
+    
     if (game === 'snake') {
         // Esperar a que el modal sea visible para obtener el canvas
         setTimeout(() => initSnake(), 100);
@@ -365,6 +443,9 @@ function openGame(game) {
 
 function closeGame(game) {
     document.getElementById(game + '-modal').classList.remove('active');
+    // Restaurar scroll del body
+    document.body.style.overflow = '';
+    
     if (game === 'snake') {
         clearInterval(gameLoop);
         document.removeEventListener('keydown', handleSnakeInput);
@@ -408,6 +489,24 @@ function handleSnakeInput(e) {
     if ((key === 'arrowdown' || key === 's') && direction.y === 0) direction = {x: 0, y: 1};
     if ((key === 'arrowleft' || key === 'a') && direction.x === 0) direction = {x: -1, y: 0};
     if ((key === 'arrowright' || key === 'd') && direction.x === 0) direction = {x: 1, y: 0};
+}
+
+// Función para cambiar dirección desde botones móviles
+function changeSnakeDirection(dir) {
+    switch(dir) {
+        case 'up':
+            if (direction.y === 0) direction = {x: 0, y: -1};
+            break;
+        case 'down':
+            if (direction.y === 0) direction = {x: 0, y: 1};
+            break;
+        case 'left':
+            if (direction.x === 0) direction = {x: -1, y: 0};
+            break;
+        case 'right':
+            if (direction.x === 0) direction = {x: 1, y: 0};
+            break;
+    }
 }
 
 function updateSnake() {

@@ -1,7 +1,31 @@
 from django.contrib import admin
-from .models import Categoria, Carousel
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
+from .models import Categoria, Carousel, Profile
 
 # Register your models here.
+
+# Inline para el perfil del usuario
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+    verbose_name_plural = 'Perfil'
+    fields = ('avatar', 'bio', 'website', 'github', 'linkedin', 'twitter')
+
+# Extender el admin de User para incluir el perfil
+class UserAdmin(BaseUserAdmin):
+    inlines = (ProfileInline,)
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'get_avatar')
+    
+    def get_avatar(self, obj):
+        if hasattr(obj, 'profile') and obj.profile.avatar:
+            return f'✓ Avatar'
+        return '✗ Sin avatar'
+    get_avatar.short_description = 'Foto de Perfil'
+
+# Re-registrar UserAdmin
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 
 @admin.register(Carousel)
 class CarouselAdmin(admin.ModelAdmin):
